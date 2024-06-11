@@ -1,9 +1,9 @@
 import axios from "axios";
-import { /* useContext,*/ useEffect, useState } from "react";
+import {  useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import SearchForm from "../form/SearchBookForm";
-//import { AuthContext } from '../provider/AuthProvider';
+import { AuthContext } from '../provider/AuthProvider';
 
 const BookSearch = () => {
   const [buchData, setBuchData] = useState([]);
@@ -13,10 +13,10 @@ const BookSearch = () => {
   const [ratingOptions, setRatingOptions] = useState([]);
   const [isJavaScript, setIsJavaScript] = useState(false);
   const [isTypeScript, setIsTypeScript] = useState(false);
-  const [selectedBookFormat, setselectedBookFormat] = useState("");
+  const [selectedBookFormat, setSelectedBookFormat] = useState("");
   const [searchError, setSearchError] = useState(false);
   const [showTable, setShowTable] = useState(false);
-  // const { cToken } = useContext(AuthContext);
+   const { cToken } = useContext(AuthContext);
   const navigate = useNavigate();
 
   function getIdFromLinks(_links) {
@@ -116,7 +116,7 @@ const BookSearch = () => {
     navigate(`/details/${params.row.id}`);
   };
 
-  /*const handleDeleteRow = async (id, cToken) => {
+  const handleDeleteRow = async (id, cToken) => {
       try {
         if (!cToken) {
           throw new Error('No token available');
@@ -141,7 +141,7 @@ const BookSearch = () => {
       } catch (error) {
         console.error('Error deleting book:', error);
       }
-    };*/
+    };
 
   const handleReset = () => {
     setSearchIsbn("");
@@ -149,7 +149,7 @@ const BookSearch = () => {
     setSelectedRatingOption("");
     setIsJavaScript(false);
     setIsTypeScript(false);
-    setselectedBookFormat("");
+    setSelectedBookFormat("");
   };
 
   return (
@@ -167,13 +167,13 @@ const BookSearch = () => {
         isTypeScript={isTypeScript}
         setIsTypeScript={setIsTypeScript}
         selectedBookFormat={selectedBookFormat}
-        setselectedBookFormat={setselectedBookFormat}
+        setSelectedBookFormat={setSelectedBookFormat}
         handleSearch={handleSearch}
         searchError={searchError}
         showTable={showTable}
         navigateToDetails={navigateToDetails}
-        //   handleDeleteRow={handleDeleteRow}
-        //   cToken={cToken}
+           handleDeleteRow={handleDeleteRow}
+           cToken={cToken}
         buchDataWithUniqueId={buchDataWithUniqueId}
         handleReset={handleReset}
       />

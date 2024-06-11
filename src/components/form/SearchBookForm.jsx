@@ -11,7 +11,6 @@ import {
   Input,
   FormHelperText,
   Select,
-  MenuItem,
   Stack,
   Checkbox,
   VStack,
@@ -44,10 +43,12 @@ const BookSearchForm = ({
   showTable,
   buchDataWithUniqueId,
   navigateToDetails,
-  //cToken,
+  cToken,
   handleDeleteRow,
   handleReset,
 }) => {
+  console.log(buchDataWithUniqueId);
+
   return (
     <div>
       <Box>
@@ -80,25 +81,25 @@ const BookSearchForm = ({
         <Box>
           <FormControl>
             <FormLabel>Rating</FormLabel>{" "}
-            {/* Hier muss noch geprüft werden ob rating von BuchServer Kommt da theoretisch gemapeed wird */}
             <Select
               placeholder="Wählen Sie ein Rating"
               value={selectedRatingOption}
               onChange={(e) => setSelectedRatingOption(e.target.value)}
             >
               {ratingOptions.map((option, index) => (
-                <MenuItem key={index} value={option}>
+                <option key={index} value={option}>
                   {option}
-                </MenuItem>
+                </option>
               ))}
             </Select>
           </FormControl>
         </Box>
-        <Box mt="35px">
+        <Box mt="35px" >
           <VStack align="flex-start" spacing={0}>
             <FormLabel as="legend">JavaScript oder TypeScript</FormLabel>
             <FormControl display="flex" alignItems="center">
               <Checkbox
+                style={{ display: "flex", justifyContent: "center" }}
                 id="typescript"
                 isChecked={isTypeScript}
                 onChange={(e) => setIsTypeScript(e.target.checked)}
@@ -108,6 +109,7 @@ const BookSearchForm = ({
             </FormControl>
             <FormControl display="flex" alignItems="center">
               <Checkbox
+                mt="8px"
                 id="javascript"
                 isChecked={isJavaScript}
                 onChange={(e) => setIsJavaScript(e.target.checked)}
@@ -117,22 +119,24 @@ const BookSearchForm = ({
             </FormControl>
           </VStack>
         </Box>
-        <Box mt="35px">
+        <Box mt="20px" >
           <FormControl as="fieldset">
-            {" "}
-            {/* Hier funktioniert das klicken noch nicht muss man noch fixen */}
-            <FormLabel as="legend">Buchformat</FormLabel>
+            <FormLabel as="legend" >
+              Buchformat
+            </FormLabel>
+            <Box>
             <RadioGroup
-            aria-label="Radio options"
+              aria-label="Radio options"
               name="book-format"
               value={selectedBookFormat}
-              onChange={(e)=> setSelectedBookFormat(e.target.value)}
+              onChange={(value) => setSelectedBookFormat(value)}
             >
-              <Stack spacing="24px">
-                <Radio value = "DRUCKAUSGABE">Druckausgabe</Radio>
+              <Stack spacing="8px">
+                <Radio value="DRUCKAUSGABE">Druckausgabe</Radio>
                 <Radio value="KINDLE">Kindle</Radio>
               </Stack>
             </RadioGroup>
+            </Box>
           </FormControl>
         </Box>
         <Box display="flex" alignItems="center" mb={4}>
@@ -161,7 +165,7 @@ const BookSearchForm = ({
           Keine Bücher gefunden.
         </Text>
       ) : showTable ? (
-        <Box>
+        <Box style={{ display: "flex", justifyContent: "center" }}>
           <table>
             <thead>
               <tr>
@@ -179,7 +183,7 @@ const BookSearchForm = ({
                 <tr key={row.id}>
                   <td>{row.id}</td>
                   <td>{row.isbn}</td>
-                  <td>{row.titel}</td>
+                  <td>{row.titel.titel}</td>
                   <td>{row.rating}</td>
                   <td>{row.art}</td>
                   <td>{row.schlagwoerter}</td>
@@ -191,19 +195,18 @@ const BookSearchForm = ({
                     >
                       <SearchIcon />
                     </IconButton>
-                    {
-                      //cToken &&
+                    {cToken && (
                       <IconButton
                         aria-label="delete"
                         color="secondary"
                         onClick={(event) => {
                           event.stopPropagation();
-                          handleDeleteRow(row.id /*cToken*/);
+                          handleDeleteRow(row.id, cToken);
                         }}
                       >
                         <DeleteIcon />
                       </IconButton>
-                    }
+                    )}
                   </td>
                 </tr>
               ))}
@@ -234,7 +237,7 @@ BookSearchForm.propTypes = {
   showTable: PropTypes.bool.isRequired,
   buchDataWithUniqueId: PropTypes.array.isRequired,
   navigateToDetails: PropTypes.func.isRequired,
-  // cToken: PropTypes.string,
+  cToken: PropTypes.string,
   handleDeleteRow: PropTypes.func.isRequired,
   handleReset: PropTypes.func.isRequired,
 };
