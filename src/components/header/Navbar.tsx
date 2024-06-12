@@ -71,7 +71,7 @@ export default function WithSubnavigation() {
           >
             
             <Link as={RouterLink} to="/">
-      <Button leftIcon={<FaBook />} color="white" bg="blue.600" variant="solid">
+      <Button leftIcon={<FaBook />} color="white" bg="black" variant="solid">
         BookStore
       </Button>
     </Link>
@@ -108,12 +108,12 @@ export default function WithSubnavigation() {
               fontSize={"sm"}
               fontWeight={600}
               color={"white"}
-              bg={"blue.600"}
+              bg={"black"}
               _hover={{
-                bg: "blue.800",
+                bg: "white.800",
               }}
             >
-              Sign In
+              Anmelden
             </Button>
   )}
 </Stack>

@@ -147,14 +147,18 @@ const BookSearchForm = ({
         </Box>
         <Box display="flex" mb={8}>
           <Button
-            colorScheme="green"
+            bg = "black"
+            color = "white"
             leftIcon={<SearchIcon />}
             onClick={handleSearch}
             mr={4}
           >
             Suche
           </Button>
-          <Button colorScheme="blue" onClick={handleReset}>
+          <Button 
+            bg = "black"
+            color = "white"
+            onClick={handleReset}>
             Zurücksetzen
           </Button>
         </Box>
