@@ -47,7 +47,7 @@ const BookSearchForm = ({
   handleDeleteRow,
   handleReset,
 }) => {
-  console.log(buchDataWithUniqueId);
+
 
   return (
     <div>

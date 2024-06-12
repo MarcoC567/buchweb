@@ -23,11 +23,19 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import {useContext} from "react";
+import { AuthContext } from "../provider/AuthProvider";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
-
+  const auth : any = useContext(AuthContext);
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    auth.logout();
+    navigate("/");
+  };
   return (
     <Box>
       <Flex
@@ -75,25 +83,40 @@ export default function WithSubnavigation() {
         </Flex>
 
         <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={"flex-end"}
-          direction={"row"}
-          spacing={6}
-        >
-          <Button
-            as={"a"}
-            fontSize={"4x2"}
-            fontWeight={600}
-            color={"white"}
-            bg={"blue.600"}
-            href={"/login"}
-            _hover={{
-              bg: "blue.800",
-            }}
-          >
-            Sign In
-          </Button>
-        </Stack>
+  flex={{ base: 1, md: 0 }}
+  justify={"flex-end"}
+  direction={"row"}
+  spacing={6}
+>
+{auth && auth.isLoggedIn() ? (
+            <Button
+              fontSize={"sm"}
+              fontWeight={600}
+              color={"white"}
+              bg={"red.600"}
+              onClick={handleLogout}
+              _hover={{
+                bg: "red.800",
+              }}
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button
+              as={RouterLink}
+              to={"/login"}
+              fontSize={"sm"}
+              fontWeight={600}
+              color={"white"}
+              bg={"blue.600"}
+              _hover={{
+                bg: "blue.800",
+              }}
+            >
+              Sign In
+            </Button>
+  )}
+</Stack>
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>

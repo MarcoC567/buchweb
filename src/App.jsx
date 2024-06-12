@@ -8,7 +8,7 @@ import Login from "./components/header/login.jsx";
 //import { useAuth } from './components/provider/useAuth.js';
 
 function App() {
-  //const {writeAccess} = useAuth(); <---- relevant für AddBook und EditBook 
+  //const {writeAccess} = useAuth();
   return (
     <Router>
       <div className="App">
@@ -16,7 +16,7 @@ function App() {
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/search" element={  <Search /> } />
+            <Route path="/search" element={   <Search /> } />
             <Route path="/login" element={<Login/>}/>
           </Routes>
         </div>

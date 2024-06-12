@@ -1,9 +1,9 @@
 import axios from "axios";
-import {  useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import SearchForm from "../form/SearchBookForm";
-import { AuthContext } from '../provider/AuthProvider';
+import { useAuth } from "../provider/useAuth.js";
 
 const BookSearch = () => {
   const [buchData, setBuchData] = useState([]);
@@ -16,7 +16,7 @@ const BookSearch = () => {
   const [selectedBookFormat, setSelectedBookFormat] = useState("");
   const [searchError, setSearchError] = useState(false);
   const [showTable, setShowTable] = useState(false);
-   const { cToken } = useContext(AuthContext);
+  const { cToken } = useAuth();
   const navigate = useNavigate();
 
   function getIdFromLinks(_links) {
@@ -41,6 +41,7 @@ const BookSearch = () => {
   const handleSearch = async () => {
     setSearchError(false);
     setShowTable(true);
+    console.log(cToken);
 
     try {
       let apiUrl = "/api/rest";

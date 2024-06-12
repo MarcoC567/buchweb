@@ -7,10 +7,10 @@ import { AuthProvider } from './components/provider/AuthProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+          <AuthProvider>
     <ChakraProvider>
-      <AuthProvider>
         <App />
-     </AuthProvider>
      </ChakraProvider>
+     </AuthProvider>
   </React.StrictMode>
 );
