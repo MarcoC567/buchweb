@@ -249,6 +249,7 @@ BookSearchForm.propTypes = {
   showTable: PropTypes.bool.isRequired,
   buchDataWithUniqueId: PropTypes.array.isRequired,
   navigateToDetails: PropTypes.func.isRequired,
+  navigateToBook: PropTypes.func.isRequired,
   navigateToBookEdit: PropTypes.func.isRequired,
   cToken: PropTypes.string,
   handleDeleteRow: PropTypes.func.isRequired,

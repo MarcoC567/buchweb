@@ -2,17 +2,14 @@ import {
     FormControl,
     FormLabel,
     Box,
-    Text,
-    IconButton,
+    Button,
     Input,
     FormHelperText,
     Checkbox,
   } from "@chakra-ui/react";
 
   import {
-    SearchIcon,
-    WarningIcon,
-    DeleteIcon,
+    CheckIcon,
   } from "@chakra-ui/icons";
 
   import PropTypes from "prop-types";
@@ -36,11 +33,7 @@ const BookEditForm = ({
   setEditHomepage,
   editSchlagwoerter,
   setEditSchlagwoerter,
-  searchError,
-  showTable,
-  buchDataWithUniqueId,
-  navigateToDetails,
-  handleDeleteRow,
+  handleSearch,
 }) => {
   return (
     <div>
@@ -149,59 +142,16 @@ const BookEditForm = ({
           </FormHelperText>
         </FormControl>
       </Box>
-      {searchError ? (
-        <Text style={{ display: "flex", alignItems: "center" }}>
-          <WarningIcon style={{ marginRight: "5px" }} />
-          Keine Bücher gefunden.
-        </Text>
-      ) : showTable ? (
-        <Box>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>ISBN</th>
-                <th>Titel</th>
-                <th>Rating</th>
-                <th>Art</th>
-                <th>Schlagwörter</th>
-                <th>Aktionen</th>
-              </tr>
-            </thead>
-            <tbody>
-              {buchDataWithUniqueId.map((row) => (
-                <tr key={row.id}>
-                  <td>{row.id}</td>
-                  <td>{row.isbn}</td>
-                  <td>{row.titel}</td>
-                  <td>{row.rating}</td>
-                  <td>{row.art}</td>
-                  <td>{row.schlagwoerter}</td>
-                  <td>
-                    <IconButton
-                      aria-label="search"
-                      color="primary"
-                      onClick={() => navigateToDetails(row.id)}
-                    >
-                      <SearchIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      color="secondary"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDeleteRow(row.id);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <Box display="flex" mb={8}>
+          <Button
+            colorScheme="green"
+            leftIcon={<CheckIcon />}
+            onClick={handleSearch}
+            mr={4}
+          >
+            Bestätigen
+          </Button>
         </Box>
-      ) : null}
     </div>
   );
 };
@@ -225,12 +175,10 @@ BookEditForm.propTypes = {
   setEditHomepage: PropTypes.func.isRequired,
   editSchlagwoerter: PropTypes.string.isRequired,
   setEditSchlagwoerter: PropTypes.func.isRequired,
-  searchError: PropTypes.bool.isRequired,
-  showTable: PropTypes.bool.isRequired,
-  buchDataWithUniqueId: PropTypes.array.isRequired,
-  navigateToDetails: PropTypes.func.isRequired,
   // cToken: PropTypes.string,
   handleDeleteRow: PropTypes.func.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  handleReset: PropTypes.func.isRequired,
   };
 
 export default BookEditForm;
