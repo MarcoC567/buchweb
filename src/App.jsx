@@ -5,6 +5,7 @@ import Home from "./components/main/Home";
 //import Forbidden from "./components/main/Forbidden.jsx";
 import Search from "./components/main/SearchBook";
 import Login from "./components/header/login.jsx";
+import Edit from "./components/main/EditBook";
 //import { useAuth } from './components/provider/useAuth.js';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/search" element={   <Search /> } />
             <Route path="/login" element={<Login/>}/>
+            <Route path="/bookedit/:id" element={   <Edit /> } />
           </Routes>
         </div>
       </div>

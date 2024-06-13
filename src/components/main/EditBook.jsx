@@ -1,12 +1,12 @@
 import axios from "axios";
-import { /* useContext,*/ useEffect, useState } from "react";
+import { /* useContext,*/ useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import EditForm from "../form/EditBookForm";
 //import { AuthContext } from '../provider/AuthProvider';
 
 const BookEdit = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
   const [editTitel, setEditTitel] = useState("");
   const [editIsbn, setEditIsbn] = useState("");
   const [editArt, setEditArt] = useState("");

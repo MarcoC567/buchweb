@@ -20,6 +20,7 @@ import {
   SearchIcon,
   WarningIcon,
   DeleteIcon,
+  EditIcon,
 } from "@chakra-ui/icons";
 
 import PropTypes from "prop-types";
@@ -43,6 +44,7 @@ const BookSearchForm = ({
   showTable,
   buchDataWithUniqueId,
   navigateToDetails,
+  navigateToBookEdit,
   cToken,
   handleDeleteRow,
   handleReset,
@@ -195,6 +197,16 @@ const BookSearchForm = ({
                     >
                       <SearchIcon />
                     </IconButton>
+                    <IconButton
+                      aria-label="bookedit"
+                      color="primary"
+                      onClick={() => {
+                        const params = { row: { id: row.id } };
+                        navigateToBookEdit(params)
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
                     {cToken && (
                       <IconButton
                         aria-label="delete"
@@ -237,6 +249,7 @@ BookSearchForm.propTypes = {
   showTable: PropTypes.bool.isRequired,
   buchDataWithUniqueId: PropTypes.array.isRequired,
   navigateToDetails: PropTypes.func.isRequired,
+  navigateToBookEdit: PropTypes.func.isRequired,
   cToken: PropTypes.string,
   handleDeleteRow: PropTypes.func.isRequired,
   handleReset: PropTypes.func.isRequired,
