@@ -1,37 +1,36 @@
 import axios from "axios";
-import { /* useContext,*/ useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 
+import { useParams } from "react-router-dom";
 import EditForm from "../form/EditBookForm";
 //import { AuthContext } from '../provider/AuthProvider';
 
 const BookEdit = () => {
-  const [searchQuery] = useState("");
+  console.log("BookEdit component rendered"); // Log to check if component renders
+  const { id } = useParams(); // Extrahiere die ID aus der URL
   const [editTitel, setEditTitel] = useState("");
   const [editIsbn, setEditIsbn] = useState("");
   const [editArt, setEditArt] = useState("");
-  const [editPreis, setEditPreis] = useState(0);
-  const [editRabatt, setEditRabatt] = useState(0);
   const [editLieferbar, setEditLieferbar] = useState(false);
-  const [editDatum, setEditDatum] = useState("");
-  const [editHomepage, setEditHomepage] = useState("");
   const [editSchlagwoerter, setEditSchlagwoerter] = useState("");
   const [searchError, setSearchError] = useState(false);
   const [showTable, setShowTable] = useState(false);
   const [buchDataWithUniqueId, setBuchDataWithUniqueId] = useState([]);
 
-  const navigate = useNavigate();
-
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
+    console.log("Starting search with id:", id); // Log for search start
     try {
-      const response = await axios.get(`https://example.com/api/books?query=${searchQuery}`);
+      const response = await axios.get(`/api/rest/${id}`);
       const results = response.data;
+      console.log("Search results:", results); // Log for search results
 
       if (results.length === 0) {
+        console.warn("No results found for id:", id); // Log for no results
         setSearchError(true);
         setShowTable(false);
         setBuchDataWithUniqueId([]);
       } else {
+        console.log("Results found:", results); // Log for results found
         setSearchError(false);
         setShowTable(true);
         setBuchDataWithUniqueId(results);
@@ -41,35 +40,13 @@ const BookEdit = () => {
       setSearchError(true);
       setShowTable(false);
     }
-  };
+  }, [id]);
 
-
-  const navigateToDetails = (id) => {
-    const book = buchDataWithUniqueId.find((buch) => buch.id === id);
-    if (book) {
-      setEditTitel(book.titel);
-      setEditIsbn(book.isbn);
-      setEditArt(book.art);
-      setEditPreis(book.preis);
-      setEditRabatt(book.rabatt);
-      setEditLieferbar(book.lieferbar);
-      setEditDatum(book.datum);
-      setEditHomepage(book.homepage);
-      setEditSchlagwoerter(book.schlagwoerter);
-      // Hier können Sie zur Detailansicht navigieren oder diese anzeigen
-      navigate(`/books/${id}`);
+  useEffect(() => {
+    if (id) {
+      handleSearch();
     }
-  };
-
-  const handleDeleteRow = async (id) => {
-    try {
-      await axios.delete(`https://example.com/api/books/${id}`);
-      const updatedData = buchDataWithUniqueId.filter((buch) => buch.id !== id);
-      setBuchDataWithUniqueId(updatedData);
-    } catch (error) {
-      console.error("Fehler beim Löschen:", error);
-    }
-  };
+  }, [id, handleSearch])
 
   return (
     <div>
@@ -80,24 +57,14 @@ const BookEdit = () => {
             setEditIsbn={setEditIsbn}
             editArt={editArt}
             setEditArt={setEditArt}
-            editPreis={editPreis}
-            setEditPreis={setEditPreis}
-            editRabatt={editRabatt}
-            setEditRabatt={setEditRabatt}
             editLieferbar={editLieferbar}
             setEditLieferbar={setEditLieferbar}
-            editDatum={editDatum}
-            setEditDatum={setEditDatum}
-            editHomepage={editHomepage}
-            setEditHomepage={setEditHomepage}
             editSchlagwoerter={editSchlagwoerter}
             setEditSchlagwoerter={setEditSchlagwoerter}
             handleSearch={handleSearch}
             searchError={searchError}
             showTable={showTable}
             buchDataWithUniqueId={buchDataWithUniqueId}
-            navigateToDetails={navigateToDetails}
-            handleDeleteRow={handleDeleteRow}
           />
     </div>
   );
