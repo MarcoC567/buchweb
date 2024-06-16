@@ -6,7 +6,6 @@ import EditForm from "../form/EditBookForm";
 //import { AuthContext } from '../provider/AuthProvider';
 
 const BookEdit = () => {
-  console.log("BookEdit component rendered"); // Log to check if component renders
   const { id } = useParams(); // Extrahiere die ID aus der URL
   const [editTitel, setEditTitel] = useState("");
   const [editIsbn, setEditIsbn] = useState("");
@@ -30,10 +29,16 @@ const BookEdit = () => {
         setShowTable(false);
         setBuchDataWithUniqueId([]);
       } else {
-        console.log("Results found:", results); // Log for results found
+        console.log("Results found:", results);
         setSearchError(false);
         setShowTable(true);
         setBuchDataWithUniqueId(results);
+        setEditTitel(results.titel?.titel || "");
+        setEditIsbn(results.isbn || "");
+        setEditArt(results.art || "");
+        setEditLieferbar(results.lieferbar || false);
+        setEditSchlagwoerter(results.schlagwoerter.join(", ") || "");
+
       }
     } catch (error) {
       console.error("Fehler bei der Suche:", error);
