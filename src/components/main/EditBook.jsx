@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 import EditForm from "../form/EditBookForm";
-//import { AuthContext } from '../provider/AuthProvider';
+import { AuthContext } from '../provider/AuthProvider';
 
 const BookEdit = () => {
   const { id } = useParams(); // Extrahiere die ID aus der URL
@@ -15,6 +15,7 @@ const BookEdit = () => {
   const [searchError, setSearchError] = useState(false);
   const [showTable, setShowTable] = useState(false);
   const [buchDataWithUniqueId, setBuchDataWithUniqueId] = useState([]);
+  const { cToken } = useContext(AuthContext); // Get the cToken from the AuthContext
 
   const handleSearch = useCallback(async () => {
     console.log("Starting search with id:", id); // Log for search start
@@ -38,7 +39,6 @@ const BookEdit = () => {
         setEditArt(results.art || "");
         setEditLieferbar(results.lieferbar || false);
         setEditSchlagwoerter(results.schlagwoerter.join(", ") || "");
-
       }
     } catch (error) {
       console.error("Fehler bei der Suche:", error);
@@ -54,11 +54,19 @@ const BookEdit = () => {
       isbn: editIsbn,
       art: editArt,
       lieferbar: editLieferbar,
-      schlagwoerter: editSchlagwoerter.split(",").map(s => s.trim()), // Falls Schlagwörter ein Array von Strings sind
+      schlagwoerter: editSchlagwoerter.split(",").map(s => s.trim()),
     };
 
     try {
-      await axios.put(`/api/rest/${id}`, updatedBook);
+      await axios.put(
+        `/api/rest/${id}`,
+        updatedBook,
+        {
+          headers: {
+            'Authorization': `Bearer ${cToken}` // Include the token in the request
+          }
+        }
+      );
       console.log("Book saved successfully:", updatedBook);
     } catch (error) {
       console.error("Fehler beim Speichern:", error);
