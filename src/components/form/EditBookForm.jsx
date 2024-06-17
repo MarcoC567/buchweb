@@ -26,6 +26,7 @@ const BookEditForm = ({
   editSchlagwoerter,
   setEditSchlagwoerter,
   handleSearch,
+  handleSave,
 }) => {
   return (
     <div>
@@ -88,15 +89,22 @@ const BookEditForm = ({
         </FormControl>
       </Box>
       <Box display="flex" mb={8}>
-          <Button
-            colorScheme="green"
-            leftIcon={<CheckIcon />}
-            onClick={handleSearch}
-            mr={4}
-          >
-            Bestätigen
-          </Button>
-        </Box>
+        <Button
+          colorScheme="green"
+          leftIcon={<CheckIcon />}
+          onClick={handleSave}
+          mr={4}
+        >
+          Bestätigen
+        </Button>
+        <Button
+          colorScheme="blue"
+          onClick={handleSearch}
+          mr={4}
+        >
+          Zurücksetzen
+        </Button>
+      </Box>
     </div>
   );
 };
@@ -112,8 +120,8 @@ BookEditForm.propTypes = {
   setEditLieferbar: PropTypes.func.isRequired,
   editSchlagwoerter: PropTypes.string.isRequired,
   setEditSchlagwoerter: PropTypes.func.isRequired,
-  // cToken: PropTypes.string,
   handleSearch: PropTypes.func.isRequired,
+  handleSave: PropTypes.func.isRequired,
   };
 
 export default BookEditForm;

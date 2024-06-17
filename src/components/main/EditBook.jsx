@@ -47,6 +47,24 @@ const BookEdit = () => {
     }
   }, [id]);
 
+  const handleSave = async () => {
+    console.log("Saving book with id:", id);
+    const updatedBook = {
+      titel: editTitel,
+      isbn: editIsbn,
+      art: editArt,
+      lieferbar: editLieferbar,
+      schlagwoerter: editSchlagwoerter.split(",").map(s => s.trim()), // Falls Schlagwörter ein Array von Strings sind
+    };
+
+    try {
+      await axios.put(`/api/rest/${id}`, updatedBook);
+      console.log("Book saved successfully:", updatedBook);
+    } catch (error) {
+      console.error("Fehler beim Speichern:", error);
+    }
+  };
+
   useEffect(() => {
     if (id) {
       handleSearch();
@@ -67,6 +85,7 @@ const BookEdit = () => {
             editSchlagwoerter={editSchlagwoerter}
             setEditSchlagwoerter={setEditSchlagwoerter}
             handleSearch={handleSearch}
+            handleSave={handleSave}
             searchError={searchError}
             showTable={showTable}
             buchDataWithUniqueId={buchDataWithUniqueId}
