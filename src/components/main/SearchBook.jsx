@@ -118,6 +118,15 @@ const BookSearch = () => {
     navigate(`/details/${params.row.id}`);
   };
 
+  const navigateToBookEdit = (params) => {
+    console.log('params:', params);
+    if (!params || !params.row || !params.row.id) {
+      console.error('Invalid params:', params);
+      return;
+    }
+    navigate(`/bookedit/${params.row.id}`);
+  };
+
   const handleDeleteRow = async (id, cToken) => {
     try {
       if (!cToken) {
@@ -174,8 +183,9 @@ const BookSearch = () => {
         searchError={searchError}
         showTable={showTable}
         navigateToDetails={navigateToDetails}
-        handleDeleteRow={handleDeleteRow}
-        cToken={cToken}
+           handleDeleteRow={handleDeleteRow}
+           cToken={cToken}
+           navigateToBookEdit={navigateToBookEdit}
         buchDataWithUniqueId={buchDataWithUniqueId}
         handleReset={handleReset}
       />
