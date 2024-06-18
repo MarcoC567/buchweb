@@ -47,8 +47,6 @@ const BookSearchForm = ({
   handleDeleteRow,
   handleReset,
 }) => {
-
-
   return (
     <div>
       <Box>
@@ -94,7 +92,7 @@ const BookSearchForm = ({
             </Select>
           </FormControl>
         </Box>
-        <Box mt="35px" >
+        <Box mt="35px">
           <VStack align="flex-start" spacing={0}>
             <FormLabel as="legend">JavaScript oder TypeScript</FormLabel>
             <FormControl display="flex" alignItems="center">
@@ -119,23 +117,21 @@ const BookSearchForm = ({
             </FormControl>
           </VStack>
         </Box>
-        <Box mt="20px" >
+        <Box mt="20px">
           <FormControl as="fieldset">
-            <FormLabel as="legend" >
-              Buchformat
-            </FormLabel>
+            <FormLabel as="legend">Buchformat</FormLabel>
             <Box>
-            <RadioGroup
-              aria-label="Radio options"
-              name="book-format"
-              value={selectedBookFormat}
-              onChange={(value) => setSelectedBookFormat(value)}
-            >
-              <Stack spacing="8px">
-                <Radio value="DRUCKAUSGABE">Druckausgabe</Radio>
-                <Radio value="KINDLE">Kindle</Radio>
-              </Stack>
-            </RadioGroup>
+              <RadioGroup
+                aria-label="Radio options"
+                name="book-format"
+                value={selectedBookFormat}
+                onChange={(value) => setSelectedBookFormat(value)}
+              >
+                <Stack spacing="8px">
+                  <Radio value="DRUCKAUSGABE">Druckausgabe</Radio>
+                  <Radio value="KINDLE">Kindle</Radio>
+                </Stack>
+              </RadioGroup>
             </Box>
           </FormControl>
         </Box>
@@ -147,18 +143,15 @@ const BookSearchForm = ({
         </Box>
         <Box display="flex" mb={8}>
           <Button
-            bg = "black"
-            color = "white"
+            bg="black"
+            color="white"
             leftIcon={<SearchIcon />}
             onClick={handleSearch}
             mr={4}
           >
             Suche
           </Button>
-          <Button 
-            bg = "black"
-            color = "white"
-            onClick={handleReset}>
+          <Button bg="black" color="white" onClick={handleReset}>
             Zurücksetzen
           </Button>
         </Box>

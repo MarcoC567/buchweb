@@ -24,14 +24,14 @@ import {
   ChevronRightIcon,
 } from "@chakra-ui/icons";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import {useContext} from "react";
+import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
-  const auth : any = useContext(AuthContext);
+  const auth: any = useContext(AuthContext);
   const navigate = useNavigate();
-  
+
   const handleLogout = () => {
     auth.logout();
     navigate("/");
@@ -69,13 +69,17 @@ export default function WithSubnavigation() {
             fontFamily={"heading"}
             color={useColorModeValue("gray.800", "white")}
           >
-            
             <Link as={RouterLink} to="/">
-      <Button leftIcon={<FaBook />} color="white" bg="black" variant="solid">
-        BookStore
-      </Button>
-    </Link>
-    </Text>
+              <Button
+                leftIcon={<FaBook />}
+                color="white"
+                bg="black"
+                variant="solid"
+              >
+                BookStore
+              </Button>
+            </Link>
+          </Text>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNav />
@@ -83,12 +87,12 @@ export default function WithSubnavigation() {
         </Flex>
 
         <Stack
-  flex={{ base: 1, md: 0 }}
-  justify={"flex-end"}
-  direction={"row"}
-  spacing={6}
->
-{auth && auth.isLoggedIn() ? (
+          flex={{ base: 1, md: 0 }}
+          justify={"flex-end"}
+          direction={"row"}
+          spacing={6}
+        >
+          {auth && auth.isLoggedIn() ? (
             <Button
               fontSize={"sm"}
               fontWeight={600}
@@ -115,8 +119,8 @@ export default function WithSubnavigation() {
             >
               Anmelden
             </Button>
-  )}
-</Stack>
+          )}
+        </Stack>
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -295,5 +299,4 @@ const NAV_ITEMS: Array<NavItem> = [
     label: "Hinzufügen",
     href: "/add",
   },
-
 ];

@@ -25,10 +25,10 @@ const Login = () => {
     try {
       setErrorMessage("");
       const success = await login(benutzer, password);
-      console.log(success)
+      console.log(success);
       if (success) {
         navigate("/");
-        console.log("ok")
+        console.log("ok");
       } else {
         setErrorMessage("Invalid user or password. Please try again.");
       }
