@@ -1,15 +1,13 @@
-import { createContext, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
+import { createContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-
-  const [cToken, setCToken] = useState(localStorage.getItem('cToken') || '');
+  const [cToken, setCToken] = useState(localStorage.getItem("cToken") || "");
   const [writeAccess, setWriteAccess] = useState(false);
 
- 
   useEffect(() => {
     if (cToken) {
       setWriteAccess(true);
@@ -21,8 +19,9 @@ export const AuthProvider = ({ children }) => {
       const response = await loginUser({ username, password });
       const { access_token } = response.data;
       console.log(response.data);
+      console.log("TEST")
       setCToken(access_token);
-      localStorage.setItem('cToken', access_token);
+      localStorage.setItem("cToken", access_token);
       setWriteAccess(true);
       return true;
     } catch (error) {
@@ -31,32 +30,35 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loginUser = async ({ username, password }) => {
-    const url = '/api/auth/login';
-    const requestData = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+    const url = "/api/auth/login";
+    const requestData = `username=${encodeURIComponent(
+      username
+    )}&password=${encodeURIComponent(password)}`;
 
     const response = await axios.post(url, requestData);
     if (response.status === 200) {
       return response;
     } else {
-      throw new Error('Login failed');
+      throw new Error("Login failed");
     }
   };
 
-  
   const logout = () => {
-    setCToken('');
+    setCToken("");
     setWriteAccess(false);
-    localStorage.removeItem('cToken');
+    localStorage.removeItem("cToken");
   };
 
   const isLoggedIn = () => {
-    return cToken !== '';
+    return cToken !== "";
   };
 
   console.log(cToken);
 
   return (
-    <AuthContext.Provider value={{ cToken, writeAccess, login, logout, isLoggedIn }}>
+    <AuthContext.Provider
+      value={{ cToken, writeAccess, login, logout, isLoggedIn }}
+    >
       {children}
     </AuthContext.Provider>
   );

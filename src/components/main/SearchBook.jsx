@@ -1,5 +1,5 @@
 import axios from "axios";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import SearchForm from "../form/SearchBookForm";
@@ -53,7 +53,7 @@ const BookSearch = () => {
         { term: "typescript", value: isTypeScript },
         { term: "art", value: selectedBookFormat },
       ];
-
+      console.log(apiUrl);
       searchParams.forEach((param) => {
         apiUrl = appendSearchTerm(apiUrl, param.term, param.value);
       });
@@ -74,6 +74,7 @@ const BookSearch = () => {
       setSearchError(true);
     }
   };
+
   function appendSearchTerm(apiUrl, searchTerm, searchValue) {
     return searchValue
       ? `${apiUrl}${
@@ -114,7 +115,12 @@ const BookSearch = () => {
   }));
 
   const navigateToDetails = (params) => {
-    navigate(`/details/${params.row.id}`);
+    console.log('params:', params);
+    if (!params || !params.row || !params.row.id) {
+      console.error('Invalid params:', params);
+      return;
+    }
+    navigate(`/bookdetails/${params.row.id}`);
   };
 
   const navigateToBookEdit = (params) => {
@@ -127,31 +133,31 @@ const BookSearch = () => {
   };
 
   const handleDeleteRow = async (id, cToken) => {
-      try {
-        if (!cToken) {
-          throw new Error('No token available');
-        }
-  
-        const headers = {
-          Authorization: `Bearer ${cToken}`,
-          'Content-Type': 'application/json',
-        };
-  
-        const response = await fetch(`/api/rest/${id}`, {
-          method: 'DELETE',
-          headers: headers,
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to delete book');
-        }
-  
-        const updatedRows = buchDataWithUniqueId.filter((row) => row.id !== id);
-        setBuchData(updatedRows);
-      } catch (error) {
-        console.error('Error deleting book:', error);
+    try {
+      if (!cToken) {
+        throw new Error("No token available");
       }
-    };
+
+      const headers = {
+        Authorization: `Bearer ${cToken}`,
+        "Content-Type": "application/json",
+      };
+
+      const response = await fetch(`/api/rest/${id}`, {
+        method: "DELETE",
+        headers: headers,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete book");
+      }
+
+      const updatedRows = buchDataWithUniqueId.filter((row) => row.id !== id);
+      setBuchData(updatedRows);
+    } catch (error) {
+      console.error("Error deleting book:", error);
+    }
+  };
 
   const handleReset = () => {
     setSearchIsbn("");
@@ -184,7 +190,7 @@ const BookSearch = () => {
         navigateToDetails={navigateToDetails}
            handleDeleteRow={handleDeleteRow}
            cToken={cToken}
-        navigateToBookEdit={navigateToBookEdit}
+           navigateToBookEdit={navigateToBookEdit}
         buchDataWithUniqueId={buchDataWithUniqueId}
         handleReset={handleReset}
       />

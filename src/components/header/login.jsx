@@ -25,10 +25,10 @@ const Login = () => {
     try {
       setErrorMessage("");
       const success = await login(benutzer, password);
-      console.log(success)
+      console.log(success);
       if (success) {
         navigate("/");
-        console.log("ok")
+        console.log("ok");
       } else {
         setErrorMessage("Invalid user or password. Please try again.");
       }
@@ -47,7 +47,7 @@ const Login = () => {
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+          <Heading fontSize={"4xl"}>Anmelden</Heading>
         </Stack>
         <Box
           rounded={"lg"}
@@ -79,14 +79,14 @@ const Login = () => {
                 justify={"space-between"}
               ></Stack>
               <Button
-                bg={"blue.400"}
+                bg={"black"}
                 color={"white"}
                 _hover={{
                   bg: "blue.500",
                 }}
                 onClick={handleLogin}
               >
-                Sign in
+                Anmelden
               </Button>
               {errorMessage && (
                 <Text color="red.500" fontSize="sm">
