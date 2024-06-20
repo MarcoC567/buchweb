@@ -4,6 +4,7 @@ import {
     Box,
     Button,
     Input,
+    Select,
     FormHelperText,
     Checkbox,
   } from "@chakra-ui/react";
@@ -28,6 +29,23 @@ const BookEditForm = ({
   handleSearch,
   handleSave,
 }) => {
+  const isSchlagwortSelected = (schlagwort) => {
+    return editSchlagwoerter.includes(schlagwort);
+  };
+
+  const handleCheckboxChange = (event) => {
+    const { value, checked } = event.target;
+    const newSchlagwoerter = new Set(editSchlagwoerter.split(',').map(sw => sw.trim()).filter(Boolean));
+    
+    if (checked) {
+      newSchlagwoerter.add(value);
+    } else {
+      newSchlagwoerter.delete(value);
+    }
+
+    setEditSchlagwoerter(Array.from(newSchlagwoerter).join(', '));
+  };
+
   return (
     <div>
       <Box>
@@ -54,16 +72,19 @@ const BookEditForm = ({
           </FormHelperText>
         </FormControl>
         <FormControl>
-          <FormLabel>Art</FormLabel>
-          <Input
-            placeholder="Art eingeben"
-            value={editArt}
-            onChange={(e) => setEditArt(e.target.value)}
-          />
-          <FormHelperText>
-            Bitte geben Sie die neue Art Ihres Buches ein
-          </FormHelperText>
-        </FormControl>
+            <FormLabel>Art</FormLabel>
+            <Select
+              name="art"
+              value={editArt || ""}
+              onChange={(e) =>
+                setEditArt((e.target.value)
+                )
+              }
+            >
+              <option value="KINDLE">Kindle</option>
+              <option value="DRUCKAUSGABE">Druckausgabe</option>
+            </Select>
+          </FormControl>
         <FormControl>
           <FormLabel>Lieferbar</FormLabel>
           <Checkbox
@@ -77,14 +98,23 @@ const BookEditForm = ({
           </FormHelperText>
         </FormControl>
         <FormControl>
-          <FormLabel>Schlagwörter</FormLabel>
-          <Input
-            placeholder="Schlagwörter eingeben"
-            value={editSchlagwoerter}
-            onChange={(e) => setEditSchlagwoerter(e.target.value)}
-          />
+        <FormLabel>Schlagwörter</FormLabel>
+          <Checkbox
+            value="JavaScript"
+            isChecked={isSchlagwortSelected("JAVASCRIPT")}
+            onChange={handleCheckboxChange}
+          >
+            JavaScript
+          </Checkbox>
+          <Checkbox
+            value="TypeScript"
+            isChecked={isSchlagwortSelected("TYPESCRIPT")}
+            onChange={handleCheckboxChange}
+          >
+            TypeScript
+          </Checkbox>
           <FormHelperText>
-            Bitte geben Sie die neuen Schlagwörter Ihres Buches ein
+            Bitte wählen Sie die Schlagwörter Ihres Buches aus
           </FormHelperText>
         </FormControl>
       </Box>
