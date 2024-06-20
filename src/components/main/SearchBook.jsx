@@ -115,7 +115,12 @@ const BookSearch = () => {
   }));
 
   const navigateToDetails = (params) => {
-    navigate(`/details/${params.row.id}`);
+    console.log('params:', params);
+    if (!params || !params.row || !params.row.id) {
+      console.error('Invalid params:', params);
+      return;
+    }
+    navigate(`/bookdetails/${params.row.id}`);
   };
 
   const navigateToBookEdit = (params) => {
