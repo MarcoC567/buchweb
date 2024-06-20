@@ -197,16 +197,18 @@ const BookSearchForm = ({
                     >
                       <SearchIcon />
                     </IconButton>
-                    <IconButton
-                      aria-label="bookedit"
-                      color="primary"
-                      onClick={() => {
-                        const params = { row: { id: row.id } };
-                        navigateToBookEdit(params)
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
+                    {cToken && (
+                      <IconButton
+                        aria-label="bookedit"
+                        color="primary"
+                        onClick={() => {
+                          const params = { row: { id: row.id } };
+                          navigateToBookEdit(params)
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    )}
                     {cToken && (
                       <IconButton
                         aria-label="delete"

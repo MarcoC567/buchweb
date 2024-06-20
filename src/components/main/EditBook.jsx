@@ -6,7 +6,7 @@ import EditForm from "../form/EditBookForm";
 import { AuthContext } from '../provider/AuthProvider';
 
 const BookEdit = () => {
-  const { id } = useParams(); // Extrahiere die ID aus der URL
+  const { id } = useParams();
   const [buch, setBuch] = useState({});
   const [etag, setEtag] = useState("");
   const [editTitel, setEditTitel] = useState("");
@@ -22,22 +22,21 @@ const BookEdit = () => {
   const [searchError, setSearchError] = useState(false);
   const [showTable, setShowTable] = useState(false);
   const [buchDataWithUniqueId, setBuchDataWithUniqueId] = useState([]);
-  const { cToken } = useContext(AuthContext); // Get the cToken from the AuthContext
+  const { cToken } = useContext(AuthContext);
 
   const handleSearch = useCallback(async () => {
-    console.log("Starting search with id:", id); // Log for search start
     try {
-      const response = await axios.get(`/api/rest/${id}`);
-      const results = response.data;
-      console.log("Search results:", results); // Log for search results
+      const response = await axios.get(`/api/rest/${id}`, {
+        headers: {
+          'Cache-Control': 'no-cache', // Prevent caching
+        }
+      });      const results = response.data;
 
       if (results.length === 0) {
-        console.warn("No results found for id:", id); // Log for no results
         setSearchError(true);
         setShowTable(false);
         setBuchDataWithUniqueId([]);
       } else {
-        console.log("Results found:", results);
         setBuch(results);
         setEtag(response.headers['etag']);
         setSearchError(false);
@@ -61,7 +60,6 @@ const BookEdit = () => {
   }, [id]);
 
   const handleSave = async () => {
-    console.log("Saving book with id:", id);
     const updatedBook = {
       ...buch,
       titel: { titel: editTitel },
@@ -75,15 +73,10 @@ const BookEdit = () => {
       datum: editDatum,
       homepage: editHomepage,
     };
-
-    console.log("Request body:", updatedBook);
-
+    
     try {
-      await axios.put(
-        `/api/rest/${id}`,
-        updatedBook,
-        {
-          headers: {
+      const response = await axios.put(`/api/rest/${id}`, updatedBook, {
+        headers: {
             'Authorization': `Bearer ${cToken}`,
             'Content-Type': 'application/json',
             'If-Match': etag,
@@ -91,7 +84,22 @@ const BookEdit = () => {
         }
       );
       console.log("Book saved successfully:", updatedBook);
-      
+
+      setBuch(response.data);
+      setEtag(response.headers['etag']);
+      setEditTitel(response.data.titel?.titel || "");
+      setEditIsbn(response.data.isbn || "");
+      setEditArt(response.data.art || "");
+      setEditLieferbar(response.data.lieferbar || false);
+      setEditSchlagwoerter(response.data.schlagwoerter ? response.data.schlagwoerter.join(", ") : "");
+      setEditRating(response.data.rating || 0);
+      setEditPreis(response.data.preis || 0);
+      setEditRabatt(response.data.rabatt || 0);
+      setEditDatum(response.data.datum || "");
+      setEditHomepage(response.data.homepage || "");
+
+      // Rufe handleSearch auf, um die neuesten Daten zu holen
+      handleSearch();
     } catch (error) {
       console.error("Fehler beim Speichern:", error);
     }
