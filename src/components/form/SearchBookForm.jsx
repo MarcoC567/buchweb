@@ -212,7 +212,10 @@ const BookSearchForm = ({
                     <IconButton
                       aria-label="search"
                       color="primary"
-                      onClick={() => navigateToDetails(row.id)}
+                      onClick={() => {
+                        const params = { row: { id: row.id } };
+                        navigateToDetails(params)
+                      }}
                     >
                       <SearchIcon />
                     </IconButton>
