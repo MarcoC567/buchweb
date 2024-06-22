@@ -10,19 +10,36 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (cToken) {
-      setWriteAccess(true);
+      checkWriteAccess(cToken);
     }
   }, [cToken]);
+
+  const checkWriteAccess = (token) => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log("Decoded payload:", payload);
+      const roles = payload.realm_access?.roles || [];
+      console.log("User roles:", roles);
+      if (roles.includes("buch-admin")) {
+        setWriteAccess(true);
+      } else {
+        setWriteAccess(false);
+      }
+    } catch (error) {
+      console.error("Error decoding token or setting write access:", error);
+      setWriteAccess(false);
+    }
+  };
+  
+  
 
   const login = async (username, password) => {
     try {
       const response = await loginUser({ username, password });
       const { access_token } = response.data;
-      console.log(response.data);
-      console.log("TEST")
       setCToken(access_token);
       localStorage.setItem("cToken", access_token);
-      setWriteAccess(true);
+      checkWriteAccess(access_token);
       return true;
     } catch (error) {
       return false;
@@ -31,14 +48,16 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = async ({ username, password }) => {
     const url = "/api/auth/login";
-    const requestData = `username=${encodeURIComponent(
-      username
-    )}&password=${encodeURIComponent(password)}`;
+    const requestData = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
-    const response = await axios.post(url, requestData);
-    if (response.status === 200) {
-      return response;
-    } else {
+    try {
+      const response = await axios.post(url, requestData);
+      if (response.status === 200) {
+        return response;
+      } else {
+        throw new Error("Login failed");
+      }
+    } catch (error) {
       throw new Error("Login failed");
     }
   };
@@ -52,8 +71,6 @@ export const AuthProvider = ({ children }) => {
   const isLoggedIn = () => {
     return cToken !== "";
   };
-
-  console.log(cToken);
 
   return (
     <AuthContext.Provider
