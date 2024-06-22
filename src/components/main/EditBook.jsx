@@ -13,7 +13,7 @@ const BookEdit = () => {
   const [editIsbn, setEditIsbn] = useState("");
   const [editArt, setEditArt] = useState("");
   const [editLieferbar, setEditLieferbar] = useState(false);
-  const [editSchlagwoerter, setEditSchlagwoerter] = useState("");
+  const [editSchlagwoerter, setEditSchlagwoerter] = useState([]);
   const [editRating, setEditRating] = useState(0);
   const [editPreis, setEditPreis] = useState(0);
   const [editRabatt, setEditRabatt] = useState(0);
@@ -27,9 +27,6 @@ const BookEdit = () => {
   const handleSearch = useCallback(async () => {
     try {
       const response = await axios.get(`/api/rest/${id}`, {
-        headers: {
-          'Cache-Control': 'no-cache', // Prevent caching
-        }
       });      const results = response.data;
 
       if (results.length === 0) {
@@ -45,7 +42,7 @@ const BookEdit = () => {
         setEditIsbn(results.isbn || "");
         setEditArt(results.art || "");
         setEditLieferbar(results.lieferbar || false);
-        setEditSchlagwoerter(results.schlagwoerter.join(", ") || "");
+        setEditSchlagwoerter(results.schlagwoerter || []);
         setEditRating(results.rating || 0);
         setEditPreis(results.preis || 0);
         setEditRabatt(results.rabatt || 0);
@@ -66,7 +63,7 @@ const BookEdit = () => {
       isbn: editIsbn,
       art: editArt,
       lieferbar: editLieferbar,
-      schlagwoerter: editSchlagwoerter.split(",").map(s => s.trim()),
+      schlagwoerter: editSchlagwoerter,
       rating: editRating,
       preis: editPreis,
       rabatt: editRabatt,
@@ -83,22 +80,28 @@ const BookEdit = () => {
           }
         }
       );
-      console.log("Book saved successfully:", updatedBook);
+      console.log("Book data:", updatedBook);
+      console.log("Server response:", response);
 
-      setBuch(response.data);
-      setEtag(response.headers['etag']);
-      setEditTitel(response.data.titel?.titel || "");
-      setEditIsbn(response.data.isbn || "");
-      setEditArt(response.data.art || "");
-      setEditLieferbar(response.data.lieferbar || false);
-      setEditSchlagwoerter(response.data.schlagwoerter ? response.data.schlagwoerter.join(", ") : "");
-      setEditRating(response.data.rating || 0);
-      setEditPreis(response.data.preis || 0);
-      setEditRabatt(response.data.rabatt || 0);
-      setEditDatum(response.data.datum || "");
-      setEditHomepage(response.data.homepage || "");
+      if (response.status === 204) {
+        console.log("Buch wurde erfolgreich bearbeitet.");
+        setBuch(response.data);
+        setEtag(response.headers['etag']);
+        setEditTitel(response.data.titel?.titel || "");
+        setEditIsbn(response.data.isbn || "");
+        setEditArt(response.data.art || "");
+        setEditLieferbar(response.data.lieferbar || false);
+        setEditSchlagwoerter(response.data.schlagwoerter || []);
+        setEditRating(response.data.rating || 0);
+        setEditPreis(response.data.preis || 0);
+        setEditRabatt(response.data.rabatt || 0);
+        setEditDatum(response.data.datum || "");
+        setEditHomepage(response.data.homepage || "");
+      }
+      else {
+        console.error("Error occurred during PUT request:", response);
+      }
 
-      // Rufe handleSearch auf, um die neuesten Daten zu holen
       handleSearch();
     } catch (error) {
       console.error("Fehler beim Speichern:", error);

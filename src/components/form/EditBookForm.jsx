@@ -14,6 +14,15 @@ import {
   } from "@chakra-ui/icons";
 
   import PropTypes from "prop-types";
+  import { useState, useEffect } from "react";
+  
+  import {
+    validateISBN,
+    validateTitel,
+    validatePreis,
+    validateRabatt,
+    validateHomepage,
+  } from "./inputValidator";
 
 const BookEditForm = ({
   editTitel,
@@ -29,22 +38,111 @@ const BookEditForm = ({
   handleSearch,
   handleSave,
 }) => {
+  const [isbnValidation, setIsbnValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+
+  const [titleValidation, setTitleValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+  const [preisValidation, setPreisValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+  const [rabattValidation, setRabattValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+  const [homepageValidation, setHomepageValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+  const [formValid, setFormValid] = useState(true);
+
   const isSchlagwortSelected = (schlagwort) => {
     return editSchlagwoerter.includes(schlagwort);
   };
 
-  const handleCheckboxChange = (event) => {
-    const { value, checked } = event.target;
-    const newSchlagwoerter = new Set(editSchlagwoerter.split(',').map(sw => sw.trim()).filter(Boolean));
-    
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    let newSchlagwoerter = [...editSchlagwoerter];
+
     if (checked) {
-      newSchlagwoerter.add(value);
+      newSchlagwoerter.push(value);
     } else {
-      newSchlagwoerter.delete(value);
+      newSchlagwoerter.disabled(value);
     }
 
-    setEditSchlagwoerter(Array.from(newSchlagwoerter).join(', '));
+    setEditSchlagwoerter(newSchlagwoerter);
   };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "isbn") {
+      setEditIsbn(value);
+      const isValidISBN = validateISBN(value);
+      setIsbnValidation({
+        isValid: isValidISBN,
+        errorMessage: isValidISBN ? "" : "Muss eine gültige ISBN sein",
+      });
+    }
+
+    if (name === "titel") {
+      setEditTitel(value);
+      const isValidTitle = validateTitel(value);
+      setTitleValidation({
+        isValid: isValidTitle,
+        errorMessage: isValidTitle ? "" : "Der Titel darf nicht leer sein",
+      });
+    }
+
+    if (name === "preis") {
+      const isValidPreis = validatePreis(value);
+      setPreisValidation({
+        isValid: isValidPreis,
+        errorMessage: isValidPreis ? "" : "Ungültiges Betragsformat",
+      });
+    }
+
+    if (name === "rabatt") {
+      const isValidRabatt = validateRabatt(value);
+      setRabattValidation({
+        isValid: isValidRabatt,
+        errorMessage: isValidRabatt
+          ? ""
+          : "Muss ein gültiger Rabatt sein (z.B. 0.10)",
+      });
+    }
+
+    if (name === "homepage") {
+      const isValidHomepage = validateHomepage(value);
+      setHomepageValidation({
+        isValid: isValidHomepage,
+        errorMessage: isValidHomepage
+          ? ""
+          : "Muss eine gültige URL sein (https://beispiel.com)",
+      });
+    }
+  };
+
+  useEffect(() => {
+    setFormValid(
+      isbnValidation.isValid &&
+        titleValidation.isValid &&
+        preisValidation.isValid &&
+        rabattValidation.isValid &&
+        homepageValidation.isValid
+    );
+  }, [
+    isbnValidation.isValid,
+    titleValidation.isValid,
+    preisValidation.isValid,
+    rabattValidation.isValid,
+    homepageValidation.isValid,
+  ]);
 
   return (
     <div>
@@ -53,22 +151,26 @@ const BookEditForm = ({
           <FormLabel>Titel</FormLabel>
           <Input
             placeholder="Titel eingeben"
+            name="titel"
             value={editTitel}
-            onChange={(e) => setEditTitel(e.target.value)}
+            onChange={handleInputChange}
+            isInvalid={!titleValidation.isValid}
           />
-          <FormHelperText>
-            Bitte geben Sie den neuen Titel Ihres Buches ein
+          <FormHelperText color="red">
+            {titleValidation.errorMessage}
           </FormHelperText>
         </FormControl>
         <FormControl>
           <FormLabel>ISBN</FormLabel>
           <Input
             placeholder="ISBN eingeben"
+            name="isbn"
             value={editIsbn}
-            onChange={(e) => setEditIsbn(e.target.value)}
+            onChange={handleInputChange}
+            isInvalid={!isbnValidation.isValid}
           />
-          <FormHelperText>
-            Bitte geben Sie die neue ISBN Ihres Buches ein
+          <FormHelperText color="red">
+            {isbnValidation.errorMessage}
           </FormHelperText>
         </FormControl>
         <FormControl>
@@ -124,6 +226,7 @@ const BookEditForm = ({
           leftIcon={<CheckIcon />}
           onClick={handleSave}
           mr={4}
+          disabled={!formValid}
         >
           Bestätigen
         </Button>
@@ -148,7 +251,7 @@ BookEditForm.propTypes = {
   setEditArt: PropTypes.func.isRequired,
   editLieferbar: PropTypes.bool.isRequired,
   setEditLieferbar: PropTypes.func.isRequired,
-  editSchlagwoerter: PropTypes.string.isRequired,
+  editSchlagwoerter: PropTypes.array.isRequired,
   setEditSchlagwoerter: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
