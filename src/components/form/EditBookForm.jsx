@@ -4,6 +4,7 @@ import {
     Box,
     Button,
     Input,
+    Select,
     FormHelperText,
     Checkbox,
   } from "@chakra-ui/react";
@@ -13,6 +14,15 @@ import {
   } from "@chakra-ui/icons";
 
   import PropTypes from "prop-types";
+  import { useState, useEffect } from "react";
+  
+  import {
+    validateISBN,
+    validateTitel,
+    validatePreis,
+    validateRabatt,
+    validateHomepage,
+  } from "./inputValidator";
 
 const BookEditForm = ({
   editTitel,
@@ -28,6 +38,112 @@ const BookEditForm = ({
   handleSearch,
   handleSave,
 }) => {
+  const [isbnValidation, setIsbnValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+
+  const [titleValidation, setTitleValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+  const [preisValidation, setPreisValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+  const [rabattValidation, setRabattValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+  const [homepageValidation, setHomepageValidation] = useState({
+    isValid: true,
+    errorMessage: "",
+  });
+  const [formValid, setFormValid] = useState(true);
+
+  const isSchlagwortSelected = (schlagwort) => {
+    return editSchlagwoerter.includes(schlagwort);
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    let newSchlagwoerter = [...editSchlagwoerter];
+
+    if (checked) {
+      newSchlagwoerter.push(value);
+    } else {
+      newSchlagwoerter.disabled(value);
+    }
+
+    setEditSchlagwoerter(newSchlagwoerter);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "isbn") {
+      setEditIsbn(value);
+      const isValidISBN = validateISBN(value);
+      setIsbnValidation({
+        isValid: isValidISBN,
+        errorMessage: isValidISBN ? "" : "Muss eine gültige ISBN sein",
+      });
+    }
+
+    if (name === "titel") {
+      setEditTitel(value);
+      const isValidTitle = validateTitel(value);
+      setTitleValidation({
+        isValid: isValidTitle,
+        errorMessage: isValidTitle ? "" : "Der Titel darf nicht leer sein",
+      });
+    }
+
+    if (name === "preis") {
+      const isValidPreis = validatePreis(value);
+      setPreisValidation({
+        isValid: isValidPreis,
+        errorMessage: isValidPreis ? "" : "Ungültiges Betragsformat",
+      });
+    }
+
+    if (name === "rabatt") {
+      const isValidRabatt = validateRabatt(value);
+      setRabattValidation({
+        isValid: isValidRabatt,
+        errorMessage: isValidRabatt
+          ? ""
+          : "Muss ein gültiger Rabatt sein (z.B. 0.10)",
+      });
+    }
+
+    if (name === "homepage") {
+      const isValidHomepage = validateHomepage(value);
+      setHomepageValidation({
+        isValid: isValidHomepage,
+        errorMessage: isValidHomepage
+          ? ""
+          : "Muss eine gültige URL sein (https://beispiel.com)",
+      });
+    }
+  };
+
+  useEffect(() => {
+    setFormValid(
+      isbnValidation.isValid &&
+        titleValidation.isValid &&
+        preisValidation.isValid &&
+        rabattValidation.isValid &&
+        homepageValidation.isValid
+    );
+  }, [
+    isbnValidation.isValid,
+    titleValidation.isValid,
+    preisValidation.isValid,
+    rabattValidation.isValid,
+    homepageValidation.isValid,
+  ]);
+
   return (
     <div>
       <Box>
@@ -35,35 +151,42 @@ const BookEditForm = ({
           <FormLabel>Titel</FormLabel>
           <Input
             placeholder="Titel eingeben"
+            name="titel"
             value={editTitel}
-            onChange={(e) => setEditTitel(e.target.value)}
+            onChange={handleInputChange}
+            isInvalid={!titleValidation.isValid}
           />
-          <FormHelperText>
-            Bitte geben Sie den neuen Titel Ihres Buches ein
+          <FormHelperText color="red">
+            {titleValidation.errorMessage}
           </FormHelperText>
         </FormControl>
         <FormControl>
           <FormLabel>ISBN</FormLabel>
           <Input
             placeholder="ISBN eingeben"
+            name="isbn"
             value={editIsbn}
-            onChange={(e) => setEditIsbn(e.target.value)}
+            onChange={handleInputChange}
+            isInvalid={!isbnValidation.isValid}
           />
-          <FormHelperText>
-            Bitte geben Sie die neue ISBN Ihres Buches ein
+          <FormHelperText color="red">
+            {isbnValidation.errorMessage}
           </FormHelperText>
         </FormControl>
         <FormControl>
-          <FormLabel>Art</FormLabel>
-          <Input
-            placeholder="Art eingeben"
-            value={editArt}
-            onChange={(e) => setEditArt(e.target.value)}
-          />
-          <FormHelperText>
-            Bitte geben Sie die neue Art Ihres Buches ein
-          </FormHelperText>
-        </FormControl>
+            <FormLabel>Art</FormLabel>
+            <Select
+              name="art"
+              value={editArt || ""}
+              onChange={(e) =>
+                setEditArt((e.target.value)
+                )
+              }
+            >
+              <option value="KINDLE">Kindle</option>
+              <option value="DRUCKAUSGABE">Druckausgabe</option>
+            </Select>
+          </FormControl>
         <FormControl>
           <FormLabel>Lieferbar</FormLabel>
           <Checkbox
@@ -77,14 +200,23 @@ const BookEditForm = ({
           </FormHelperText>
         </FormControl>
         <FormControl>
-          <FormLabel>Schlagwörter</FormLabel>
-          <Input
-            placeholder="Schlagwörter eingeben"
-            value={editSchlagwoerter}
-            onChange={(e) => setEditSchlagwoerter(e.target.value)}
-          />
+        <FormLabel>Schlagwörter</FormLabel>
+          <Checkbox
+            value="JavaScript"
+            isChecked={isSchlagwortSelected("JAVASCRIPT")}
+            onChange={handleCheckboxChange}
+          >
+            JavaScript
+          </Checkbox>
+          <Checkbox
+            value="TypeScript"
+            isChecked={isSchlagwortSelected("TYPESCRIPT")}
+            onChange={handleCheckboxChange}
+          >
+            TypeScript
+          </Checkbox>
           <FormHelperText>
-            Bitte geben Sie die neuen Schlagwörter Ihres Buches ein
+            Bitte wählen Sie die Schlagwörter Ihres Buches aus
           </FormHelperText>
         </FormControl>
       </Box>
@@ -94,6 +226,7 @@ const BookEditForm = ({
           leftIcon={<CheckIcon />}
           onClick={handleSave}
           mr={4}
+          disabled={!formValid}
         >
           Bestätigen
         </Button>
@@ -118,7 +251,7 @@ BookEditForm.propTypes = {
   setEditArt: PropTypes.func.isRequired,
   editLieferbar: PropTypes.bool.isRequired,
   setEditLieferbar: PropTypes.func.isRequired,
-  editSchlagwoerter: PropTypes.string.isRequired,
+  editSchlagwoerter: PropTypes.array.isRequired,
   setEditSchlagwoerter: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
