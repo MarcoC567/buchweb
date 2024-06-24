@@ -16,8 +16,9 @@ const BookSearch = () => {
   const [selectedBookFormat, setSelectedBookFormat] = useState("");
   const [searchError, setSearchError] = useState(false);
   const [showTable, setShowTable] = useState(false);
-  const { cToken } = useAuth();
+  const { cToken, writeAccess } = useAuth();
   const navigate = useNavigate();
+  
 
   function getIdFromLinks(_links) {
     let selfLink = null;
@@ -193,6 +194,7 @@ const BookSearch = () => {
            navigateToBookEdit={navigateToBookEdit}
         buchDataWithUniqueId={buchDataWithUniqueId}
         handleReset={handleReset}
+        writeAccess={writeAccess}
       />
     </div>
   );

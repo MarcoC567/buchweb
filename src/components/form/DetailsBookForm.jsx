@@ -1,4 +1,4 @@
-import { Text, Box, FormControl, Input, Button } from "@chakra-ui/react";
+import { Text, Box, Button } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 
 const DetailsBookForm = ({

@@ -48,6 +48,7 @@ const BookSearchForm = ({
   cToken,
   handleDeleteRow,
   handleReset,
+  writeAccess,
 }) => {
   return (
     <div>
@@ -214,22 +215,25 @@ const BookSearchForm = ({
                       color="primary"
                       onClick={() => {
                         const params = { row: { id: row.id } };
-                        navigateToDetails(params)
+                        navigateToDetails(params);
                       }}
                     >
                       <SearchIcon />
                     </IconButton>
-                    <IconButton
-                      aria-label="bookedit"
-                      color="primary"
-                      onClick={() => {
-                        const params = { row: { id: row.id } };
-                        navigateToBookEdit(params);
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    {cToken && (
+                    {cToken && writeAccess &&(
+                      <IconButton
+                        aria-label="bookedit"
+                        color="primary"
+                        onClick={() => {
+                          const params = { row: { id: row.id } };
+                          navigateToBookEdit(params);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    )}
+
+                    {cToken && writeAccess &&(
                       <IconButton
                         aria-label="delete"
                         color="secondary"
@@ -276,6 +280,7 @@ BookSearchForm.propTypes = {
   cToken: PropTypes.string,
   handleDeleteRow: PropTypes.func.isRequired,
   handleReset: PropTypes.func.isRequired,
+  writeAccess: PropTypes.bool.isRequired,
 };
 
 export default BookSearchForm;
