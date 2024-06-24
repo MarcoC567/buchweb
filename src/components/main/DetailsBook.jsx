@@ -30,7 +30,7 @@ const BookDetails = () => {
             } else {
                 setSearchError(false);
                 setBuchTitel(results.titel?.titel || "Kein Titel gefunden");
-                setBuchUntertitel(results.titel?.untertitel !== "null" ? results.titel?.untertitel : "-");
+                setBuchUntertitel(results.titel?.untertitel !== "null" ? results.titel?.untertitel : "Kein Untertitel vorhanden");
                 setBuchPreis(results.preis || "");
                 setBuchArt(results.art || "Art nicht verfügbar");
                 setBuchDatum(results.datum || "Datum nicht verfügbar");
