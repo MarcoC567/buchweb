@@ -33,8 +33,12 @@ const BookEditForm = ({
   setEditArt,
   editLieferbar,
   setEditLieferbar,
-  editSchlagwoerter,
-  setEditSchlagwoerter,
+  editPreis,
+  setEditPreis,
+  editRabatt,
+  setEditRabatt,
+  editHomepage,
+  setEditHomepage,
   handleSearch,
   handleSave,
 }) => {
@@ -61,23 +65,6 @@ const BookEditForm = ({
   });
   const [formValid, setFormValid] = useState(true);
 
-  const isSchlagwortSelected = (schlagwort) => {
-    return editSchlagwoerter.includes(schlagwort);
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-    let newSchlagwoerter = [...editSchlagwoerter];
-
-    if (checked) {
-      newSchlagwoerter.push(value);
-    } else {
-      newSchlagwoerter.disabled(value);
-    }
-
-    setEditSchlagwoerter(newSchlagwoerter);
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -100,6 +87,7 @@ const BookEditForm = ({
     }
 
     if (name === "preis") {
+      setEditPreis(value);
       const isValidPreis = validatePreis(value);
       setPreisValidation({
         isValid: isValidPreis,
@@ -108,6 +96,7 @@ const BookEditForm = ({
     }
 
     if (name === "rabatt") {
+      setEditRabatt(value);
       const isValidRabatt = validateRabatt(value);
       setRabattValidation({
         isValid: isValidRabatt,
@@ -118,6 +107,7 @@ const BookEditForm = ({
     }
 
     if (name === "homepage") {
+      setEditHomepage(value);
       const isValidHomepage = validateHomepage(value);
       setHomepageValidation({
         isValid: isValidHomepage,
@@ -200,23 +190,42 @@ const BookEditForm = ({
           </FormHelperText>
         </FormControl>
         <FormControl>
-        <FormLabel>Schlagwörter</FormLabel>
-          <Checkbox
-            value="JavaScript"
-            isChecked={isSchlagwortSelected("JAVASCRIPT")}
-            onChange={handleCheckboxChange}
-          >
-            JavaScript
-          </Checkbox>
-          <Checkbox
-            value="TypeScript"
-            isChecked={isSchlagwortSelected("TYPESCRIPT")}
-            onChange={handleCheckboxChange}
-          >
-            TypeScript
-          </Checkbox>
-          <FormHelperText>
-            Bitte wählen Sie die Schlagwörter Ihres Buches aus
+          <FormLabel>Preis</FormLabel>
+          <Input
+            placeholder="Preis eingeben"
+            name="preis"
+            value={editPreis}
+            onChange={handleInputChange}
+            isInvalid={!preisValidation.isValid}
+          />
+          <FormHelperText color="red">
+            {preisValidation.errorMessage}
+          </FormHelperText>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Rabatt</FormLabel>
+          <Input
+            placeholder="Rabatt eingeben"
+            name="rabatt"
+            value={editRabatt}
+            onChange={handleInputChange}
+            isInvalid={!rabattValidation.isValid}
+          />
+          <FormHelperText color="red">
+            {rabattValidation.errorMessage}
+          </FormHelperText>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Homepage</FormLabel>
+          <Input
+            placeholder="Homepage eingeben"
+            name="homepage"
+            value={editHomepage}
+            onChange={handleInputChange}
+            isInvalid={!homepageValidation.isValid}
+          />
+          <FormHelperText color="red">
+            {homepageValidation.errorMessage}
           </FormHelperText>
         </FormControl>
       </Box>
@@ -251,8 +260,12 @@ BookEditForm.propTypes = {
   setEditArt: PropTypes.func.isRequired,
   editLieferbar: PropTypes.bool.isRequired,
   setEditLieferbar: PropTypes.func.isRequired,
-  editSchlagwoerter: PropTypes.array.isRequired,
-  setEditSchlagwoerter: PropTypes.func.isRequired,
+  editPreis: PropTypes.number.isRequired,
+  setEditPreis: PropTypes.func.isRequired,
+  editRabatt: PropTypes.number.isRequired,
+  setEditRabatt: PropTypes.func.isRequired,
+  editHomepage: PropTypes.string.isRequired,
+  setEditHomepage: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
   };

@@ -65,8 +65,8 @@ const BookEdit = () => {
       lieferbar: editLieferbar,
       schlagwoerter: editSchlagwoerter,
       rating: editRating,
-      preis: editPreis,
-      rabatt: editRabatt,
+      preis: parseFloat(editPreis),
+      rabatt: parseFloat(editRabatt),
       datum: editDatum,
       homepage: editHomepage,
     };
