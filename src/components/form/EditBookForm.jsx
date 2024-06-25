@@ -18,7 +18,6 @@ import {
   
   import {
     validateISBN,
-    validateTitel,
     validatePreis,
     validateRabatt,
     validateHomepage,
@@ -26,7 +25,6 @@ import {
 
 const BookEditForm = ({
   editTitel,
-  setEditTitel,
   editIsbn,
   setEditIsbn,
   editArt,
@@ -49,22 +47,21 @@ const BookEditForm = ({
     errorMessage: "",
   });
 
-  const [titleValidation, setTitleValidation] = useState({
-    isValid: true,
-    errorMessage: "",
-  });
   const [preisValidation, setPreisValidation] = useState({
     isValid: true,
     errorMessage: "",
   });
+
   const [rabattValidation, setRabattValidation] = useState({
     isValid: true,
     errorMessage: "",
   });
+
   const [homepageValidation, setHomepageValidation] = useState({
     isValid: true,
     errorMessage: "",
   });
+  
   const [formValid, setFormValid] = useState(true);
 
   const isSchlagwortSelected = (schlagwort) => {
@@ -93,15 +90,6 @@ const BookEditForm = ({
       setIsbnValidation({
         isValid: isValidISBN,
         errorMessage: isValidISBN ? "" : "Muss eine gültige ISBN sein",
-      });
-    }
-
-    if (name === "titel") {
-      setEditTitel(value);
-      const isValidTitle = validateTitel(value);
-      setTitleValidation({
-        isValid: isValidTitle,
-        errorMessage: isValidTitle ? "" : "Der Titel darf nicht leer sein",
       });
     }
 
@@ -140,14 +128,12 @@ const BookEditForm = ({
   useEffect(() => {
     setFormValid(
       isbnValidation.isValid &&
-        titleValidation.isValid &&
-        preisValidation.isValid &&
-        rabattValidation.isValid &&
-        homepageValidation.isValid
+      preisValidation.isValid &&
+      rabattValidation.isValid &&
+      homepageValidation.isValid
     );
   }, [
     isbnValidation.isValid,
-    titleValidation.isValid,
     preisValidation.isValid,
     rabattValidation.isValid,
     homepageValidation.isValid,
@@ -158,16 +144,7 @@ const BookEditForm = ({
       <Box>
         <FormControl>
           <FormLabel>Titel</FormLabel>
-          <Input
-            placeholder="Titel eingeben"
-            name="titel"
-            value={editTitel}
-            onChange={handleInputChange}
-            isInvalid={!titleValidation.isValid}
-          />
-          <FormHelperText color="red">
-            {titleValidation.errorMessage}
-          </FormHelperText>
+          <div style={{ textAlign: 'left' }}> {editTitel} </div>
         </FormControl>
         <FormControl>
           <FormLabel>ISBN</FormLabel>
@@ -292,7 +269,6 @@ const BookEditForm = ({
 
 BookEditForm.propTypes = {
   editTitel: PropTypes.string.isRequired,
-  setEditTitel: PropTypes.func.isRequired,
   editIsbn: PropTypes.string.isRequired,
   setEditIsbn: PropTypes.func.isRequired,
   editArt: PropTypes.string.isRequired,
