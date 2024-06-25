@@ -57,22 +57,25 @@ const BookEdit = () => {
   }, [id]);
 
   const handleSave = async () => {
-    const updatedBook = {
+    const buchDTO = {
       ...buch,
-      titel: { titel: editTitel },
       isbn: editIsbn,
       art: editArt,
       lieferbar: editLieferbar,
-      schlagwoerter: editSchlagwoerter,
       rating: editRating,
       preis: parseFloat(editPreis),
       rabatt: parseFloat(editRabatt),
       datum: editDatum,
       homepage: editHomepage,
+      schlagwoerter: editSchlagwoerter,
+      titel: {
+        ...buch.titel,
+        titel: editTitel,
+      },
     };
     
     try {
-      const response = await axios.put(`/api/rest/${id}`, updatedBook, {
+      const response = await axios.put(`/api/rest/${id}`, buchDTO, {
         headers: {
             'Authorization': `Bearer ${cToken}`,
             'Content-Type': 'application/json',
@@ -80,7 +83,7 @@ const BookEdit = () => {
           }
         }
       );
-      console.log("Book data:", updatedBook);
+      console.log("Book data:", buchDTO);
       console.log("Server response:", response);
 
       if (response.status === 204) {
