@@ -231,7 +231,7 @@ const BookEditForm = ({
       </Box>
       <Box display="flex" mb={8}>
         <Button
-          colorScheme="green"
+          bg="black" color="white"
           leftIcon={<CheckIcon />}
           onClick={handleSave}
           mr={4}
@@ -240,7 +240,7 @@ const BookEditForm = ({
           Bestätigen
         </Button>
         <Button
-          colorScheme="blue"
+          bg="black" color="white"
           onClick={handleSearch}
           mr={4}
         >
