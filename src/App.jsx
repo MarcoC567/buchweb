@@ -8,6 +8,7 @@ import Login from "./components/header/login.jsx";
 import Edit from "./components/main/EditBook";
 import { useAuth } from './components/provider/useAuth.js';
 import Add from "./components/main/AddBook.jsx";
+import Details from "./components/main/DetailsBook.jsx";
 
 function App() {
   const {writeAccess} = useAuth();
@@ -21,6 +22,7 @@ function App() {
             <Route path="/search" element={   <Search /> } />
             <Route path="/login" element={<Login/>}/>
             <Route path="/bookedit/:id" element={   <Edit /> } />
+            <Route path="/bookdetails/:id" element={   <Details /> } />
             <Route path="add" element={writeAccess ? <Add />: <Forbidden /> } />
           </Routes>
         </div>

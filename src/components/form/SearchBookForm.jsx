@@ -48,9 +48,8 @@ const BookSearchForm = ({
   cToken,
   handleDeleteRow,
   handleReset,
+  writeAccess,
 }) => {
-
-
   return (
     <div>
       <Box>
@@ -96,69 +95,90 @@ const BookSearchForm = ({
             </Select>
           </FormControl>
         </Box>
-        <Box mt="35px" >
-          <VStack align="flex-start" spacing={0}>
-            <FormLabel as="legend">JavaScript oder TypeScript</FormLabel>
-            <FormControl display="flex" alignItems="center">
-              <Checkbox
-                style={{ display: "flex", justifyContent: "center" }}
-                id="typescript"
-                isChecked={isTypeScript}
-                onChange={(e) => setIsTypeScript(e.target.checked)}
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          mt="20px"
+        >
+          <Box width="100%" maxWidth="200px" mt="35px">
+            <VStack align="flex-start" spacing={4} width="100%">
+              <FormLabel as="legend" textAlign="left" width="100%">
+                JavaScript oder TypeScript
+              </FormLabel>
+              <FormControl
+                display="flex"
+                justifyContent="flex-start"
+                width="100%"
               >
-                TypeScript
-              </Checkbox>
-            </FormControl>
-            <FormControl display="flex" alignItems="center">
-              <Checkbox
-                mt="8px"
-                id="javascript"
-                isChecked={isJavaScript}
-                onChange={(e) => setIsJavaScript(e.target.checked)}
+                <Checkbox
+                  id="typescript"
+                  isChecked={isTypeScript}
+                  onChange={(e) => setIsTypeScript(e.target.checked)}
+                >
+                  TypeScript
+                </Checkbox>
+              </FormControl>
+              <FormControl
+                display="flex"
+                justifyContent="flex-start"
+                width="100%"
               >
-                JavaScript
-              </Checkbox>
-            </FormControl>
-          </VStack>
-        </Box>
-        <Box mt="20px" >
-          <FormControl as="fieldset">
-            <FormLabel as="legend" >
-              Buchformat
-            </FormLabel>
-            <Box>
-            <RadioGroup
-              aria-label="Radio options"
-              name="book-format"
-              value={selectedBookFormat}
-              onChange={(value) => setSelectedBookFormat(value)}
+                <Checkbox
+                  id="javascript"
+                  isChecked={isJavaScript}
+                  onChange={(e) => setIsJavaScript(e.target.checked)}
+                >
+                  JavaScript
+                </Checkbox>
+              </FormControl>
+            </VStack>
+          </Box>
+          <Box width="100%" maxWidth="200px" mt="20px">
+            <VStack align="flex-start" spacing={4} width="100%">
+              <FormLabel as="legend" textAlign="left" width="100%">
+                Buchformat
+              </FormLabel>
+              <FormControl
+                display="flex"
+                justifyContent="flex-start"
+                width="100%"
+              >
+                <RadioGroup
+                  aria-label="Radio options"
+                  name="book-format"
+                  value={selectedBookFormat}
+                  onChange={(value) => setSelectedBookFormat(value)}
+                >
+                  <Stack spacing="8px" direction="column" align="flex-start">
+                    <Radio value="DRUCKAUSGABE">Druckausgabe</Radio>
+                    <Radio value="KINDLE">Kindle</Radio>
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+            </VStack>
+          </Box>
+
+          <Box display="flex" alignItems="center" mb={4}>
+            <Icon as={InfoIcon} w={4} h={4} mr={2} />
+            <Text fontSize="sm" mt="16px">
+              Hinweis: Keine Eingabe liefert alle Bücher
+            </Text>
+          </Box>
+          <Box display="flex" mb={8}>
+            <Button
+              bg="black"
+              color="white"
+              leftIcon={<SearchIcon />}
+              onClick={handleSearch}
+              mr={4}
             >
-              <Stack spacing="8px">
-                <Radio value="DRUCKAUSGABE">Druckausgabe</Radio>
-                <Radio value="KINDLE">Kindle</Radio>
-              </Stack>
-            </RadioGroup>
-            </Box>
-          </FormControl>
-        </Box>
-        <Box display="flex" alignItems="center" mb={4}>
-          <Icon as={InfoIcon} w={4} h={4} mr={2} />
-          <Text fontSize="sm" mt="16px">
-            Hinweis: Keine Eingabe liefert alle Bücher
-          </Text>
-        </Box>
-        <Box display="flex" mb={8}>
-          <Button
-            colorScheme="green"
-            leftIcon={<SearchIcon />}
-            onClick={handleSearch}
-            mr={4}
-          >
-            Suche
-          </Button>
-          <Button colorScheme="blue" onClick={handleReset}>
-            Zurücksetzen
-          </Button>
+              Suche
+            </Button>
+            <Button bg="black" color="white" onClick={handleReset}>
+              Zurücksetzen
+            </Button>
+          </Box>
         </Box>
       </Box>
       {searchError ? (
@@ -193,10 +213,14 @@ const BookSearchForm = ({
                     <IconButton
                       aria-label="search"
                       color="primary"
-                      onClick={() => navigateToDetails(row.id)}
+                      onClick={() => {
+                        const params = { row: { id: row.id } };
+                        navigateToDetails(params);
+                      }}
                     >
                       <SearchIcon />
                     </IconButton>
+                    {cToken && writeAccess && (
                     <IconButton
                       aria-label="bookedit"
                       color="primary"
@@ -207,7 +231,8 @@ const BookSearchForm = ({
                     >
                       <EditIcon />
                     </IconButton>
-                    {cToken && (
+                    )}
+                    {cToken && writeAccess &&(
                       <IconButton
                         aria-label="delete"
                         color="secondary"
@@ -254,6 +279,7 @@ BookSearchForm.propTypes = {
   cToken: PropTypes.string,
   handleDeleteRow: PropTypes.func.isRequired,
   handleReset: PropTypes.func.isRequired,
+  writeAccess: PropTypes.bool.isRequired,
 };
 
 export default BookSearchForm;
