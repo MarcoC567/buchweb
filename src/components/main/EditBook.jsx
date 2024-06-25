@@ -83,23 +83,9 @@ const BookEdit = () => {
           }
         }
       );
-      console.log("Book data:", buchDTO);
-      console.log("Server response:", response);
 
       if (response.status === 204) {
         console.log("Buch wurde erfolgreich bearbeitet.");
-        setBuch(response.data);
-        setEtag(response.headers['etag']);
-        setEditTitel(response.data.titel?.titel || "");
-        setEditIsbn(response.data.isbn || "");
-        setEditArt(response.data.art || "");
-        setEditLieferbar(response.data.lieferbar || false);
-        setEditSchlagwoerter(response.data.schlagwoerter || []);
-        setEditRating(response.data.rating || 0);
-        setEditPreis(response.data.preis || 0);
-        setEditRabatt(response.data.rabatt || 0);
-        setEditDatum(response.data.datum || "");
-        setEditHomepage(response.data.homepage || "");
       }
       else {
         console.error("Error occurred during PUT request:", response);
