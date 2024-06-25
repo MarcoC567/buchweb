@@ -33,6 +33,8 @@ const BookEditForm = ({
   setEditArt,
   editLieferbar,
   setEditLieferbar,
+  editSchlagwoerter,
+  setEditSchlagwoerter,
   editPreis,
   setEditPreis,
   editRabatt,
@@ -64,6 +66,23 @@ const BookEditForm = ({
     errorMessage: "",
   });
   const [formValid, setFormValid] = useState(true);
+
+  const isSchlagwortSelected = (schlagwort) => {
+    return editSchlagwoerter.includes(schlagwort);
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    let newSchlagwort = [...editSchlagwoerter];
+
+    if (checked) {
+      newSchlagwort.push(value);
+    } else {
+      newSchlagwort = newSchlagwort.filter((schlagwort) => schlagwort !== value);
+    }
+
+    setEditSchlagwoerter(newSchlagwort);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -190,6 +209,26 @@ const BookEditForm = ({
           </FormHelperText>
         </FormControl>
         <FormControl>
+        <FormLabel>Schlagwörter</FormLabel>
+          <Checkbox
+            value="JAVASCRIPT"
+            isChecked={isSchlagwortSelected("JAVASCRIPT")}
+            onChange={handleCheckboxChange}
+          >
+            JavaScript
+          </Checkbox>
+          <Checkbox
+            value="TYPESCRIPT"
+            isChecked={isSchlagwortSelected("TYPESCRIPT")}
+            onChange={handleCheckboxChange}
+          >
+            TypeScript
+          </Checkbox>
+          <FormHelperText>
+            Bitte wählen Sie die Schlagwörter Ihres Buches aus
+          </FormHelperText>
+        </FormControl>
+        <FormControl>
           <FormLabel>Preis</FormLabel>
           <Input
             placeholder="Preis eingeben"
@@ -260,6 +299,8 @@ BookEditForm.propTypes = {
   setEditArt: PropTypes.func.isRequired,
   editLieferbar: PropTypes.bool.isRequired,
   setEditLieferbar: PropTypes.func.isRequired,
+  editSchlagwoerter: PropTypes.array.isRequired,
+  setEditSchlagwoerter: PropTypes.func.isRequired,
   editPreis: PropTypes.number.isRequired,
   setEditPreis: PropTypes.func.isRequired,
   editRabatt: PropTypes.number.isRequired,
