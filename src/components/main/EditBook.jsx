@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 import EditForm from "../form/EditBookForm";
-import { AuthContext } from '../provider/AuthProvider';
+import { AuthContext } from "../provider/AuthProvider";
 
 const BookEdit = () => {
   const { id } = useParams();
@@ -23,13 +23,13 @@ const BookEdit = () => {
 
   const handleSearch = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/rest/${id}`, {
-      });      const results = response.data;
+      const response = await axios.get(`/api/rest/${id}`, {});
+      const results = response.data;
 
       if (results.length === 0) {
         setSearchError(true);
       } else {
-        setEtag(response.headers['etag']);
+        setEtag(response.headers["etag"]);
         setSearchError(false);
         setEditTitel(results.titel?.titel || "");
         setEditIsbn(results.isbn || "");
@@ -63,21 +63,19 @@ const BookEdit = () => {
         titel: editTitel,
       },
     };
-    
+
     try {
       const response = await axios.put(`/api/rest/${id}`, buchDTO, {
         headers: {
-            'Authorization': `Bearer ${cToken}`,
-            'Content-Type': 'application/json',
-            'If-Match': etag,
-          }
-        }
-      );
+          Authorization: `Bearer ${cToken}`,
+          "Content-Type": "application/json",
+          "If-Match": etag,
+        },
+      });
 
       if (response.status === 204) {
         console.log("Buch wurde erfolgreich bearbeitet.");
-      }
-      else {
+      } else {
         console.error("Error occurred during PUT request:", response);
       }
 
@@ -91,35 +89,35 @@ const BookEdit = () => {
     if (id) {
       handleSearch();
     }
-  }, [id, handleSearch])
+  }, [id, handleSearch]);
 
   return (
     <div>
       <EditForm
-            editTitel={editTitel}
-            setEditTitel={setEditTitel}
-            editIsbn={editIsbn}
-            setEditIsbn={setEditIsbn}
-            editArt={editArt}
-            setEditArt={setEditArt}
-            editLieferbar={editLieferbar}
-            setEditLieferbar={setEditLieferbar}
-            editSchlagwoerter={editSchlagwoerter}
-            setEditSchlagwoerter={setEditSchlagwoerter}
-            editRating={editRating}
-            setEditRating={setEditRating}
-            editPreis={editPreis}
-            setEditPreis={setEditPreis}
-            editRabatt={editRabatt}
-            setEditRabatt={setEditRabatt}
-            editDatum={editDatum}
-            setEditDatum={setEditDatum}
-            editHomepage={editHomepage}
-            setEditHomepage={setEditHomepage}
-            handleSearch={handleSearch}
-            handleSave={handleSave}
-            searchError={searchError}
-          />
+        editTitel={editTitel}
+        setEditTitel={setEditTitel}
+        editIsbn={editIsbn}
+        setEditIsbn={setEditIsbn}
+        editArt={editArt}
+        setEditArt={setEditArt}
+        editLieferbar={editLieferbar}
+        setEditLieferbar={setEditLieferbar}
+        editSchlagwoerter={editSchlagwoerter}
+        setEditSchlagwoerter={setEditSchlagwoerter}
+        editRating={editRating}
+        setEditRating={setEditRating}
+        editPreis={editPreis}
+        setEditPreis={setEditPreis}
+        editRabatt={editRabatt}
+        setEditRabatt={setEditRabatt}
+        editDatum={editDatum}
+        setEditDatum={setEditDatum}
+        editHomepage={editHomepage}
+        setEditHomepage={setEditHomepage}
+        handleSearch={handleSearch}
+        handleSave={handleSave}
+        searchError={searchError}
+      />
     </div>
   );
 };

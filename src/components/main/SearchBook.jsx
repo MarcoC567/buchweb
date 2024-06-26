@@ -18,7 +18,6 @@ const BookSearch = () => {
   const [showTable, setShowTable] = useState(false);
   const { cToken, writeAccess } = useAuth();
   const navigate = useNavigate();
-  
 
   function getIdFromLinks(_links) {
     let selfLink = null;
@@ -116,18 +115,18 @@ const BookSearch = () => {
   }));
 
   const navigateToDetails = (params) => {
-    console.log('params:', params);
+    console.log("params:", params);
     if (!params || !params.row || !params.row.id) {
-      console.error('Invalid params:', params);
+      console.error("Invalid params:", params);
       return;
     }
     navigate(`/bookdetails/${params.row.id}`);
   };
 
   const navigateToBookEdit = (params) => {
-    console.log('params:', params);
+    console.log("params:", params);
     if (!params || !params.row || !params.row.id) {
-      console.error('Invalid params:', params);
+      console.error("Invalid params:", params);
       return;
     }
     navigate(`/bookedit/${params.row.id}`);
@@ -189,9 +188,9 @@ const BookSearch = () => {
         searchError={searchError}
         showTable={showTable}
         navigateToDetails={navigateToDetails}
-           handleDeleteRow={handleDeleteRow}
-           cToken={cToken}
-           navigateToBookEdit={navigateToBookEdit}
+        handleDeleteRow={handleDeleteRow}
+        cToken={cToken}
+        navigateToBookEdit={navigateToBookEdit}
         buchDataWithUniqueId={buchDataWithUniqueId}
         handleReset={handleReset}
         writeAccess={writeAccess}

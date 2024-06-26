@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkWriteAccess = (token) => {
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = JSON.parse(atob(token.split(".")[1]));
       console.log("Decoded payload:", payload);
       const roles = payload.realm_access?.roles || [];
       console.log("User roles:", roles);
@@ -30,8 +30,6 @@ export const AuthProvider = ({ children }) => {
       setWriteAccess(false);
     }
   };
-  
-  
 
   const login = async (username, password) => {
     try {
@@ -48,7 +46,9 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = async ({ username, password }) => {
     const url = "/api/auth/login";
-    const requestData = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+    const requestData = `username=${encodeURIComponent(
+      username
+    )}&password=${encodeURIComponent(password)}`;
 
     try {
       const response = await axios.post(url, requestData);

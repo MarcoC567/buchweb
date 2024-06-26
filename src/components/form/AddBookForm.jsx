@@ -46,9 +46,7 @@ const AddBookForm = ({ book, handleAddBook, feedbackMessage }) => {
   });
   const [formValid, setFormValid] = useState(true);
 
-  const [addBook, setAddBook] = useState({ ...book,
-    art: "KINDLE",
-   });
+  const [addBook, setAddBook] = useState({ ...book, art: "KINDLE" });
 
   const handleDateChange = (e) => {
     const { name, value } = e.target;

@@ -1,27 +1,25 @@
 import {
-    FormControl,
-    FormLabel,
-    Box,
-    Button,
-    Input,
-    Select,
-    FormHelperText,
-    Checkbox,
-  } from "@chakra-ui/react";
+  FormControl,
+  FormLabel,
+  Box,
+  Button,
+  Input,
+  Select,
+  FormHelperText,
+  Checkbox,
+} from "@chakra-ui/react";
 
-  import {
-    CheckIcon,
-  } from "@chakra-ui/icons";
+import { CheckIcon } from "@chakra-ui/icons";
 
-  import PropTypes from "prop-types";
-  import { useState, useEffect } from "react";
-  
-  import {
-    validateISBN,
-    validatePreis,
-    validateRabatt,
-    validateHomepage,
-  } from "./inputValidator";
+import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
+
+import {
+  validateISBN,
+  validatePreis,
+  validateRabatt,
+  validateHomepage,
+} from "./inputValidator";
 
 const BookEditForm = ({
   editTitel,
@@ -61,7 +59,7 @@ const BookEditForm = ({
     isValid: true,
     errorMessage: "",
   });
-  
+
   const [formValid, setFormValid] = useState(true);
 
   const isSchlagwortSelected = (schlagwort) => {
@@ -75,7 +73,9 @@ const BookEditForm = ({
     if (checked) {
       newSchlagwort.push(value);
     } else {
-      newSchlagwort = newSchlagwort.filter((schlagwort) => schlagwort !== value);
+      newSchlagwort = newSchlagwort.filter(
+        (schlagwort) => schlagwort !== value
+      );
     }
 
     setEditSchlagwoerter(newSchlagwort);
@@ -128,9 +128,9 @@ const BookEditForm = ({
   useEffect(() => {
     setFormValid(
       isbnValidation.isValid &&
-      preisValidation.isValid &&
-      rabattValidation.isValid &&
-      homepageValidation.isValid
+        preisValidation.isValid &&
+        rabattValidation.isValid &&
+        homepageValidation.isValid
     );
   }, [
     isbnValidation.isValid,
@@ -144,7 +144,7 @@ const BookEditForm = ({
       <Box>
         <FormControl>
           <FormLabel>Titel</FormLabel>
-          <div style={{ textAlign: 'left' }}> {editTitel} </div>
+          <div style={{ textAlign: "left" }}> {editTitel} </div>
         </FormControl>
         <FormControl>
           <FormLabel>ISBN</FormLabel>
@@ -160,19 +160,16 @@ const BookEditForm = ({
           </FormHelperText>
         </FormControl>
         <FormControl>
-            <FormLabel>Art</FormLabel>
-            <Select
-              name="art"
-              value={editArt || ""}
-              onChange={(e) =>
-                setEditArt((e.target.value)
-                )
-              }
-            >
-              <option value="KINDLE">Kindle</option>
-              <option value="DRUCKAUSGABE">Druckausgabe</option>
-            </Select>
-          </FormControl>
+          <FormLabel>Art</FormLabel>
+          <Select
+            name="art"
+            value={editArt || ""}
+            onChange={(e) => setEditArt(e.target.value)}
+          >
+            <option value="KINDLE">Kindle</option>
+            <option value="DRUCKAUSGABE">Druckausgabe</option>
+          </Select>
+        </FormControl>
         <FormControl>
           <FormLabel>Lieferbar</FormLabel>
           <Checkbox
@@ -181,12 +178,10 @@ const BookEditForm = ({
           >
             Lieferbar
           </Checkbox>
-          <FormHelperText>
-            Ist das Buch lieferbar?
-          </FormHelperText>
+          <FormHelperText>Ist das Buch lieferbar?</FormHelperText>
         </FormControl>
         <FormControl>
-        <FormLabel>Schlagwörter</FormLabel>
+          <FormLabel>Schlagwörter</FormLabel>
           <Checkbox
             value="JAVASCRIPT"
             isChecked={isSchlagwortSelected("JAVASCRIPT")}
@@ -247,7 +242,8 @@ const BookEditForm = ({
       </Box>
       <Box display="flex" mb={8}>
         <Button
-          bg="black" color="white"
+          bg="black"
+          color="white"
           leftIcon={<CheckIcon />}
           onClick={handleSave}
           mr={4}
@@ -255,11 +251,7 @@ const BookEditForm = ({
         >
           Bestätigen
         </Button>
-        <Button
-          bg="black" color="white"
-          onClick={handleSearch}
-          mr={4}
-        >
+        <Button bg="black" color="white" onClick={handleSearch} mr={4}>
           Zurücksetzen
         </Button>
       </Box>
@@ -285,6 +277,6 @@ BookEditForm.propTypes = {
   setEditHomepage: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleSave: PropTypes.func.isRequired,
-  };
+};
 
 export default BookEditForm;

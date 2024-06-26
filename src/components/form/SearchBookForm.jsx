@@ -221,18 +221,18 @@ const BookSearchForm = ({
                       <SearchIcon />
                     </IconButton>
                     {cToken && writeAccess && (
-                    <IconButton
-                      aria-label="bookedit"
-                      color="primary"
-                      onClick={() => {
-                        const params = { row: { id: row.id } };
-                        navigateToBookEdit(params)
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
+                      <IconButton
+                        aria-label="bookedit"
+                        color="primary"
+                        onClick={() => {
+                          const params = { row: { id: row.id } };
+                          navigateToBookEdit(params);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
                     )}
-                    {cToken && writeAccess &&(
+                    {cToken && writeAccess && (
                       <IconButton
                         aria-label="delete"
                         color="secondary"
