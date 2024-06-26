@@ -1,0 +1,95 @@
+@startuml Klassendiagramm
+' Preview durch <Alt>d
+
+class AuthProvider {
+  - token: String
+  - writeAccess: Boolean
+}
+
+class App {
+  + main()
+}
+
+class SearchBook {
+  + EnterSearchCriteria()
+  + Waiting()
+  + SearchBook()
+}
+
+class Details {
+  + ShowDetails()
+  + EditBook()
+  + DeleteBook()
+}
+
+class EditBook {
+  + EditFields()
+  + UpdateChoice()
+  + UpdateBook()
+  + UpdateError()
+}
+
+class AddBook {
+  + EnterBookDetails()
+  + AddChoice()
+  + CreateBook()
+  + CreateError()
+}
+
+class useAuth {
+  + useAuth(): AuthContext
+}
+
+class AddBookForm {
+  + render()
+}
+
+class DetailsBookForm {
+  + render()
+}
+
+class EditBookForm {
+  + render()
+}
+
+class SearchBookForm {
+  + render()
+}
+
+class DateUtils {
+  + formatDate(dateString: String): String
+}
+
+class PriceUtils {
+  + formatPrice(price: Number): String
+}
+
+class RabattUtils {
+  + formatRabatt(rabatt: Number): String
+}
+
+class inputValidator {
+  + validateISBN(isbn: String): Boolean
+  + validateTitel(titel: String): Boolean
+  + validatePreis(preis: String): Boolean
+  + validateRabatt(rabatt: String): Boolean
+  + validateDatum(datum: String): Boolean
+  + validateHomepage(homepage: String): Boolean
+}
+
+AuthProvider <-- useAuth : uses
+App <-- SearchBook : contains
+App <-- Details : contains
+App <-- EditBook : contains
+App <-- AddBook : contains
+
+AddBookForm --> inputValidator : uses
+DetailsBookForm --> inputValidator : uses
+EditBookForm --> inputValidator : uses
+SearchBookForm --> inputValidator : uses
+
+DateUtils --> App : utility
+PriceUtils --> App : utility
+RabattUtils --> App : utility
+
+@enduml
