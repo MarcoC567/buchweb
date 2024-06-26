@@ -7,7 +7,6 @@ import { AuthContext } from '../provider/AuthProvider';
 
 const BookEdit = () => {
   const { id } = useParams();
-  const [buch, setBuch] = useState({});
   const [etag, setEtag] = useState("");
   const [editTitel, setEditTitel] = useState("");
   const [editIsbn, setEditIsbn] = useState("");
@@ -20,8 +19,6 @@ const BookEdit = () => {
   const [editDatum, setEditDatum] = useState("");
   const [editHomepage, setEditHomepage] = useState("");
   const [searchError, setSearchError] = useState(false);
-  const [showTable, setShowTable] = useState(false);
-  const [buchDataWithUniqueId, setBuchDataWithUniqueId] = useState([]);
   const { cToken } = useContext(AuthContext);
 
   const handleSearch = useCallback(async () => {
@@ -31,13 +28,9 @@ const BookEdit = () => {
 
       if (results.length === 0) {
         setSearchError(true);
-        setShowTable(false);
-        setBuchDataWithUniqueId([]);
       } else {
-        setBuch(results);
         setEtag(response.headers['etag']);
         setSearchError(false);
-        setShowTable(true);
         setEditTitel(results.titel?.titel || "");
         setEditIsbn(results.isbn || "");
         setEditArt(results.art || "");
@@ -52,13 +45,11 @@ const BookEdit = () => {
     } catch (error) {
       console.error("Fehler bei der Suche:", error);
       setSearchError(true);
-      setShowTable(false);
     }
   }, [id]);
 
   const handleSave = async () => {
     const buchDTO = {
-      ...buch,
       isbn: editIsbn,
       art: editArt,
       lieferbar: editLieferbar,
@@ -69,7 +60,6 @@ const BookEdit = () => {
       homepage: editHomepage,
       schlagwoerter: editSchlagwoerter,
       titel: {
-        ...buch.titel,
         titel: editTitel,
       },
     };
@@ -83,23 +73,9 @@ const BookEdit = () => {
           }
         }
       );
-      console.log("Book data:", buchDTO);
-      console.log("Server response:", response);
 
       if (response.status === 204) {
         console.log("Buch wurde erfolgreich bearbeitet.");
-        setBuch(response.data);
-        setEtag(response.headers['etag']);
-        setEditTitel(response.data.titel?.titel || "");
-        setEditIsbn(response.data.isbn || "");
-        setEditArt(response.data.art || "");
-        setEditLieferbar(response.data.lieferbar || false);
-        setEditSchlagwoerter(response.data.schlagwoerter || []);
-        setEditRating(response.data.rating || 0);
-        setEditPreis(response.data.preis || 0);
-        setEditRabatt(response.data.rabatt || 0);
-        setEditDatum(response.data.datum || "");
-        setEditHomepage(response.data.homepage || "");
       }
       else {
         console.error("Error occurred during PUT request:", response);
@@ -143,8 +119,6 @@ const BookEdit = () => {
             handleSearch={handleSearch}
             handleSave={handleSave}
             searchError={searchError}
-            showTable={showTable}
-            buchDataWithUniqueId={buchDataWithUniqueId}
           />
     </div>
   );
