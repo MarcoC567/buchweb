@@ -77,6 +77,13 @@ const AddBookForm = ({ book, handleAddBook, feedbackMessage }) => {
     },
   };
 
+  const handleRadioChange = (value) => {
+    setAddBook((prevBook) => ({
+      ...prevBook,
+      lieferbar: value,
+    }));
+  };
+
   const handleRatingChange = (e) => {
     const { value } = e.target;
     setAddBook((prevBook) => ({
@@ -153,13 +160,6 @@ const AddBookForm = ({ book, handleAddBook, feedbackMessage }) => {
     rabattValidation.isValid,
     homepageValidation.isValid,
   ]);
-
-  const handleRadioChange = (value) => {
-    setAddBook((prevBook) => ({
-      ...prevBook,
-      lieferbar: value,
-    }));
-  };
 
   return (
     <>
